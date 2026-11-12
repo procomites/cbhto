@@ -239,8 +239,7 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
 .membros{width:100%;border-collapse:collapse;font-size:.92rem}
 .membros th{text-align:left;background:var(--fundo);padding:10px 14px;color:var(--marinho);font-weight:600}
 .membros td{padding:10px 14px;border-bottom:1px solid var(--borda)}
-.creditos-fotos{font-size:.72rem;opacity:.6;padding-bottom:14px;line-height:1.5}
-.creditos-fotos a{color:inherit;text-decoration:underline}
+.copy a{color:inherit;text-decoration:underline}
 .tabela-rolagem{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .tabela-rolagem .membros{min-width:560px}
 .membros td:first-child{white-space:nowrap}

@@ -194,8 +194,7 @@
       <div><h4>Publicações</h4><ul><li><a href="noticias.html">Notícias</a></li><li><a href="galeria.html">Galeria de fotos</a></li><li><a href="contato.html">Fale conosco</a></li></ul></div>
     </div>
     <div class="apoio"><span>Apoio</span><img src="assets/img/logos/semarh_governo_to_negativo.svg" alt="SEMARH – Governo do Tocantins"><a href="cbhto.html#apoio"><img src="assets/img/logos/procomites_negativo.svg" alt="Procomitês Tocantins"></a></div></div>
-    <div class="copy"><div class="wrap"><span>© ${new Date().getFullYear()} CBHTO – Comitês de Bacias Hidrográficas do Estado do Tocantins</span><span>Todos os direitos reservados</span></div>
-    <div class="wrap creditos-fotos">Fotos dos banners do CBHTO, CBHRP e CBHRCC via Wikimedia Commons, licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-SA</a>: Edson Carvalho (Rio Tocantins), Ruan Lion (Rio Araguaia, Caseara), Jorge Lansarin (Parque Estadual do Cantão) e Alexandre Marino (Rio Azuis e Serras Gerais).</div></div></footer>
+    <div class="copy"><div class="wrap"><span>© ${new Date().getFullYear()} Procomitês e Comitês de Bacias Hidrográficas do Tocantins</span><span>Todos os direitos reservados · <a href="creditos.html">Créditos das imagens</a></span></div></div></footer>
     <button class="subir" aria-label="Voltar ao topo">${I.cima}</button>`;
     const s = $('.subir');
     s.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
