@@ -18,5 +18,5 @@ id = "0d6eb6dae2d04a3aba8dd3c7e7f658fb"
 # Administradores principais (separados por vírgula). Sempre têm acesso total.
 ADMIN_EMAILS = "procomites@gmail.com"
 # Preencher após configurar o Cloudflare Access (Zero Trust):
-ACCESS_TEAM_DOMAIN = ""   # ex.: cbhto.cloudflareaccess.com
-ACCESS_AUD = ""           # "Application Audience (AUD) Tag" da aplicação /admin
+ACCESS_TEAM_DOMAIN = "shrill-cell-f5d3.cloudflareaccess.com"
+ACCESS_AUD = "2fd0fdf876bc2b37338ef78bb93cb60c8e973e6d08ce3f5e456adf5dfce4c86b"   # aplicação "Painel CBHTO"
