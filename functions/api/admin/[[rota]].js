@@ -1,6 +1,6 @@
 // /api/admin/... – painel de publicação (exige login pelo Cloudflare Access).
 // Perfis: admin (tudo) · presidente e secretario (notícias e documentos do próprio comitê, com aprovação do admin).
-import { json, erro, preparar, usuarioAtual, limparHTML, registrar, texto, urlArquivo, agora, novoId, COMITES, PERFIS, NOME_PERFIL } from '../../_lib.js';
+import { json, erro, preparar, usuarioAtual, limparHTML, registrar, texto, urlArquivo, agora, novoId, origemValida, COMITES, PERFIS, NOME_PERFIL } from '../../_lib.js';
 
 const CATS_COMITE = ['Atas de reuniões', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Estudos e publicações', 'Diversos', 'Outros arquivos'];
 const CATS_GERAIS = ['Atas', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Publicações'];
@@ -9,6 +9,7 @@ const LIMITE_MB = 25;
 
 export async function onRequest({ request, env, params }) {
   try {
+    if (!origemValida(request)) return erro('Requisição recusada.', 403);
     await preparar(env);
     const u = await usuarioAtual(request, env);
     if (!u) return erro('Você não está conectado. Abra o painel pelo endereço /admin para entrar.', 401);
@@ -17,6 +18,7 @@ export async function onRequest({ request, env, params }) {
     const rec = partes.shift();
     const acao = ['aprovar', 'recusar', 'restaurar'].includes(partes[partes.length - 1]) ? partes.pop() : undefined;
     const id = partes.length ? partes.join('/') : undefined;  // ids de documentos antigos contêm "/"
+    if (id !== undefined && rec !== 'usuarios' && !/^[\w:./\-%]{1,300}$/.test(id)) return erro('Identificador inválido.', 400);
     const m = request.method;
     const admin = u.perfil === 'admin';
 

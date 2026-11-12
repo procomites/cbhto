@@ -24,8 +24,11 @@
     clearTimeout(aviso.t); aviso.t = setTimeout(() => a.className = '', erro ? 6000 : 3000);
   }
   async function api(caminho, op = {}) {
-    const r = await fetch('/api/admin/' + caminho, Object.assign({ credentials: 'same-origin' }, op,
-      op.body && !(op.body instanceof FormData) ? { headers: { 'content-type': 'application/json' }, body: JSON.stringify(op.body) } : {}));
+    const json = op.body && !(op.body instanceof FormData);
+    const r = await fetch('/api/admin/' + caminho, Object.assign({ credentials: 'same-origin' }, op, {
+      headers: Object.assign({ 'x-cbhto-painel': '1' }, json ? { 'content-type': 'application/json' } : {}),
+      body: json ? JSON.stringify(op.body) : op.body
+    }));
     let j = null; try { j = await r.json(); } catch { }
     if (!r.ok) { const e = new Error((j && j.erro) || `Erro ${r.status}`); e.status = r.status; throw e; }
     return j;
@@ -157,6 +160,7 @@
     const ed = window.Jodit.make(textarea, {
       language: 'pt_br', height: 460, minHeight: 300, toolbarAdaptive: true, toolbarSticky: false,
       showCharsCounter: false, showWordsCounter: true, showXPathInStatusbar: false,
+      sourceEditor: 'area', beautifyHTML: false,  // não baixa scripts externos (Ace/Beautify)
       askBeforePasteHTML: false, askBeforePasteFromWord: false,
       defaultActionOnPaste: 'insert_clear_html', defaultActionOnPasteFromWord: 'insert_clear_html',
       buttons: ['paragraph', 'font', 'fontsize', 'lineHeight', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'brush', 'eraser', '|',
@@ -166,7 +170,7 @@
       style: { fontFamily: 'Poppins, sans-serif', fontSize: '16px' },
       image: { editSrc: false },
       uploader: {
-        url: '/api/admin/upload', format: 'json', withCredentials: true,
+        url: '/api/admin/upload', format: 'json', withCredentials: true, headers: { 'x-cbhto-painel': '1' },
         filesVariableName: () => 'arquivo',
         isSuccess: r => !!(r && r.ok),
         getMessage: r => (r && r.erro) || 'Não foi possível enviar a imagem.',

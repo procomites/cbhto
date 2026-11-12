@@ -60,7 +60,11 @@ async function emailDoToken(token, env) {
   if (!ok) return null;
   const aud = Array.isArray(carga.aud) ? carga.aud : [carga.aud];
   if (!aud.includes(env.ACCESS_AUD)) return null;
-  if (!carga.exp || carga.exp * 1000 < Date.now()) return null;
+  if (carga.iss && carga.iss !== `https://${env.ACCESS_TEAM_DOMAIN}`) return null;
+  if (cab.alg !== 'RS256') return null;
+  const agoraS = Date.now() / 1000;
+  if (!carga.exp || carga.exp < agoraS) return null;
+  if (carga.nbf && carga.nbf > agoraS + 60) return null;
   return String(carga.email || '').toLowerCase() || null;
 }
 function cookie(req, nome) {
@@ -72,7 +76,7 @@ export async function usuarioAtual(request, env) {
   let email = null;
   const url = new URL(request.url);
   // Somente para testes no computador (wrangler pages dev). Nunca é usado no site publicado.
-  if (env.DEV_EMAIL && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) email = String(env.DEV_EMAIL).toLowerCase();
+  if (env.DEV_EMAIL && env.CF_PAGES_BRANCH === 'local' && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) email = String(env.DEV_EMAIL).toLowerCase();
   else {
     const token = request.headers.get('cf-access-jwt-assertion') || cookie(request, 'CF_Authorization');
     if (!token || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return null;
@@ -127,4 +131,11 @@ export async function limparHTML(html) {
   return (await resp.text()).trim();
 }
 export const texto = (v, max) => String(v == null ? '' : v).replace(/[\u0000-\u001f]/g, ' ').trim().slice(0, max);
-export const urlArquivo = v => { v = texto(v, 600); return /^(\/arquivos\/|midia\/|https:\/\/)/i.test(v) ? v : ''; };
+export const urlArquivo = v => { v = texto(v, 600); return /^(\/arquivos\/|midia\/|https:\/\/)/i.test(v) && !/["'<>`\s\\]/.test(v) ? v : ''; };
+// Proteção contra envio de formulários de outros sites (CSRF): exige cabeçalho próprio e mesma origem
+export function origemValida(request) {
+  if (request.method === 'GET' || request.method === 'HEAD') return true;
+  if (request.headers.get('x-cbhto-painel') !== '1') return false;
+  const origem = request.headers.get('origin');
+  return !origem || origem === new URL(request.url).origin;
+}
