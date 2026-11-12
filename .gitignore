@@ -1,0 +1,11 @@
+# PDFs acima de 25 MB (limite do Cloudflare Pages) - entram depois de comprimidos
+midia/arquivos/2024-01-17cbhtomanualdamarca.pdf
+midia/arquivos/foldermulheres-5.pdf
+midia/ci_lago/05-quinto-relatorio-quadrimestralcompressed-1.pdf
+midia/ci_lago/quarto-relatorio-quadrimestral-compressed2.pdf
+midia/manuel_alves/planodebaciahidrograficadoriomanuelalves.pdf
+midia/rio_palma/plano-de-bacia-hidrografica-do-rio-palma.pdf
+# arquivos de trabalho
+arquivos-faltando.txt
+Thumbs.db
+desktop.ini

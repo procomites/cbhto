@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+	<!-- URL Principal -->
+	<link rel="canonical" href="https://cbhto.com.br/" />
+
+	<!-- Carrega toda as informações de cabeçalho e meta de sua configuração do site e conteúdo. -->
+	<base href="https://cbhto.com.br/msn-sys-404.html" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, follow" />
+	<meta property="og:image" content="https://cbhto.com.br/images/template/cbhto-redes.png" />
+	<meta name="generator" content="WB Web Marketing Digital | 63 3215-4264 | https://wbweb.com.br" />
+	<title>Erro 404 | CBHTO</title>
+	<link href="/templates/tpl_wbweb_new/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	<link href="https://cbhto.com.br/pesquisar-sys.opensearch" rel="search" title="Pesquisa CBHTO - Comitês de Bacias Hidrográficas do Tocantins" type="application/opensearchdescription+xml" />
+	<script src="/media/jui/js/jquery.min.js?d7a674e0186efbd1a220dc1d3d3ccb3c" type="text/javascript"></script>
+	<script src="/media/jui/js/jquery-noconflict.js?d7a674e0186efbd1a220dc1d3d3ccb3c" type="text/javascript"></script>
+	<script src="/media/jui/js/jquery-migrate.min.js?d7a674e0186efbd1a220dc1d3d3ccb3c" type="text/javascript"></script>
+	<script src="/media/system/js/caption.js?d7a674e0186efbd1a220dc1d3d3ccb3c" type="text/javascript"></script>
+	<!--[if lt IE 9]><script src="/media/system/js/html5fallback.js?d7a674e0186efbd1a220dc1d3d3ccb3c" type="text/javascript"></script><![endif]-->
+	<script type="text/javascript">
+jQuery(window).on('load',  function() {
+				new JCaption('img.caption');
+			});
+	</script>
+
+
+	<!-- Funções JavaScript -->
+    <script src="/templates/tpl_wbweb_new/js/jquery-1.9.1.min.js"></script>
+	<script src="/templates/tpl_wbweb_new/js/jquery.slides.min.js"></script>
+	
+	<!-- Font Awesome Icons Version 6 (hospedado localmente, sem dependência do Kit externo) -->
+    <link rel="stylesheet" href="/templates/tpl_wbweb_new/fontawesome/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+    </style>
+
+	<!-- Style CSS template -->
+	<link rel="stylesheet" href="/templates/tpl_wbweb_new/css/normalize.min.css" type="text/css" />
+	<link rel="stylesheet" href="/templates/tpl_wbweb_new/css/template.fonts.css" type="text/css" />
+	<link rel="stylesheet" href="/templates/tpl_wbweb_new/css/template.min.css" type="text/css" />
+	<link rel="stylesheet" href="/templates/tpl_wbweb_new/css/template.resp.min.css" type="text/css" />
+
+	<!-- Meta Facebook and Twitter -->
+    	<meta property="fb:app_id" content="513483543896407" />
+	<meta property="og:locale" content="pt_BR" />
+	<meta property="og:site_name" content="CBHTO" />
+	<meta property="og:title" content="Erro 404 | CBHTO" />
+	<meta property="og:description" content="" />
+	<meta property="og:image:type" content="image/jpeg" />
+	<meta property="og:image:width" content="855" />
+	<meta property="og:image:height" content="439" />
+	<meta property="og:url" content="https://cbhto.com.br/msn-sys-404.html" />
+	<meta property="og:type" content="website" />
+    <meta name="twitter:site" content="CBHTO" />
+    <meta name="twitter:title" content="Erro 404 | CBHTO" />
+    <meta name="twitter:description" content="" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:image" content="https://cbhto.com.br/images/template/cbhto-redes.png" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FRTW3FCDSM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-FRTW3FCDSM');
+    </script>
+    
+    <!-- Dados Estruturado -->
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org/",
+            "@type": "NewsArticle",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://cbhto.com.br/msn-sys-404.html"
+            },
+            "headline": "Comitês de Bacias Hidrográficas do Tocantins - CBHTO",
+            "image": [
+                "https://cbhto.com.br/images/template/cbhto-redes.png"
+            ],
+            "datePublished": "2022-25-11 08:00:00",
+            "dateModified": "2022-20-11 08:00:00",
+            "dateCreated": "2022-20-11 08:00:00",
+            "author": {
+                "@type": "Person",
+                "name": "CBHTO",
+                "url": "https://cbhto.com.br/msn-sys-404.html",
+                "image" : "https://cbhto.com.br/images/template/cbhto-redes.png",
+                "sameAs" : [
+                    "https://www.facebook.com/cbhtocantins",
+                    "https://www.instagram.com/cbhdoto/"
+                ]
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "CBHTO",
+                "url": "https://cbhto.com.br/msn-sys-404.html",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://cbhto.com.br/images/template/cbhto-redes.png"
+                }
+            }
+        }	
+     </script>
+</head>
+
+<body itemscope itemtype="https://schema.org/WebPage">
+	<!-- Facebook -->
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+            appId      : '513483543896407',
+            xfbml      : true,
+            version    : 'v15.0'
+            });
+            FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/pt_BR/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+	<!-- Facebook -->
+
+    		<section id="posicao1001">
+            <div class="container">
+        	    		<div class="moduletable-logo">
+						
+
+<div class="custom-logo"  >
+	<figure data-wf-figure="1"><a href="/"> <img src="/images/geral_new_tpl/cbhto.png" alt="CBHTO" width="183" height="49" title="CBHTO" loading="lazy" /> </a></figure></div>
+		</div>
+			<div class="moduletable-search">
+						<div class="search-search">
+	<form action="/msn-sys-404.html" method="post" class="form-inline" role="search">
+		<label for="mod-search-searchword124" class="element-invisible">Pesquisar...</label> <input name="searchword" id="mod-search-searchword124" maxlength="200"  class="inputbox search-query input-medium" type="search" placeholder="Pesquisar..." /> <button class="button btn btn-primary" onclick="this.form.searchword.focus();">Pesquisa</button>		<input type="hidden" name="task" value="search" />
+		<input type="hidden" name="option" value="com_search" />
+		<input type="hidden" name="Itemid" value="222" />
+	</form>
+</div>
+		</div>
+			<div class="moduletable-redes">
+						
+
+<div class="custom-redes"  >
+	<span><a href="https://www.instagram.com/cbhdoto/" target="_blank" rel="noopener" title="Siga-nos no Instagram"><i class="fa-brands fa-instagram"></i></a></span> <span><a href="https://www.facebook.com/cbhtocantins" target="_blank" rel="noopener" title="Siga-nos no Facebook"><i class="fa-brands fa-facebook-f"></i></a></span></div>
+		</div>
+	
+            </div>
+        </section>
+        <div class="limpar"></div>
+	
+    
+    		<section id="posicao1002">
+            <div class="container">
+                		<div class="moduletable_menu">
+						<style type="text/css">
+@import url(https://cbhto.com.br/templates/tpl_wbweb_new/html/mod_menu_resp/css/estilo.css);
+</style>
+
+<script src="https://cbhto.com.br/templates/tpl_wbweb_new/html/mod_menu_resp/js/funcoes.js"></script>
+<!--script>
+	$( function()
+	{
+		$( '#nav li:has(ul)' ).doubleTapToGo();
+	});
+</script-->
+
+<nav id="nav" role="navigation"> 
+	<a href="#nav" title="Show navigation"></a> 
+	<a href="#" title="Hide navigation"></a>
+	<ul class="nav menu flexbox">
+	<li class="item-101 default"><a href="/" >Home</a></li><li class="item-224 divider deeper parent"><span class="separator ">Comitês do Tocantins</span>
+<ul class="nav-child unstyled small"><li class="item-229"><a href="/cbhlp-institucional/o-comite.html" >Lago de Palmas</a></li><li class="item-230"><a href="/cbhrf-institucional/o-comite.html" >Formoso</a></li><li class="item-231"><a href="/cbhlc-institucional/o-comite.html" >Lontra e Corda</a></li><li class="item-232"><a href="/cbhrma-institucional/o-comite.html" >Manuel Alves</a></li><li class="item-483"><a href="/cbhrp-institucional/o-comite.html" >Rio Palma</a></li><li class="item-233"><a href="/cbhsast-institucional/o-comite.html" >Santo Antônio e Santa Tereza</a></li></ul></li><li class="item-227"><a href="/ultimas-noticias.html" >Notícias</a></li><li class="item-228"><a href="/atendimento.html" >Fale Conosco</a></li><li class="item-246"><a href="/ci-lago/quem-somos.html" >Delegatária Ci Lago</a></li></ul>
+</nav>		</div>
+	
+            </div>
+        </section>
+        <div class="limpar"></div>
+	
+        
+    <aside id="msn_sys" class="container">
+        <div id="system-message-container">
+	</div>
+
+    </aside>
+    <div class="limpar"></div>
+
+    <article id="pg-int">
+        <div class="item-page" itemscope itemtype="https://schema.org/Article">
+	<meta itemprop="inLanguage" content="pt-BR" />
+			<div class="page-header">
+			<h1> Mensagem: Erro 404 </h1>
+		</div>
+		<div class="page-header page-header-comites">
+			<div class="bannerInterno"></div>
+			<h1> Mensagem: Erro 404 </h1>
+		</div>
+	
+		
+						
+		
+	
+	
+		
+								<div itemprop="articleBody">
+		<h1 class="msn_sys">Página não encontrada! Por favor, tente novamente.</h1>	</div>
+
+	
+							</div>
+
+    </article>
+    <div class="limpar"></div>	
+
+    
+    
+    
+    
+    
+    		<section id="posicao1007">
+            <div class="container">
+        	    		<div class="moduletable-logo">
+						
+
+<div class="custom-logo"  >
+	<figure><a href="/"> <img src="/images/geral_new_tpl/cbhto-low.png" alt="CBHTO" width="344" height="93" title="CBHTO" /> </a></figure>
+<div class="p7-redes">
+<p><a href="https://www.instagram.com/cbhdoto/" target="_blank" rel="noopener" title="Siga-nos no Instagram"><i class="fa-brands fa-instagram"></i></a></p>
+<p><a href="https://www.facebook.com/cbhtocantins" target="_blank" rel="noopener" title="Siga-nos no Facebook"><i class="fa-brands fa-facebook-f"></i></a></p>
+</div></div>
+		</div>
+			<div class="moduletable-mn">
+							<h2>Acesso Rápido</h2>
+						<ul class="nav menu mod-list">
+<li class="item-101 default"><a href="/" >Home</a></li><li class="item-224 divider parent"><span class="separator ">Comitês do Tocantins</span>
+</li><li class="item-227"><a href="/ultimas-noticias.html" >Notícias</a></li><li class="item-228"><a href="/atendimento.html" >Fale Conosco</a></li><li class="item-246"><a href="/ci-lago/quem-somos.html" >Delegatária Ci Lago</a></li></ul>
+		</div>
+			<div class="moduletable-mn">
+							<h2>Comitês do Tocantins</h2>
+						<ul class="nav menu mod-list">
+<li class="item-229"><a href="/cbhlp-institucional/o-comite.html" >Lago de Palmas</a></li><li class="item-230"><a href="/cbhrf-institucional/o-comite.html" >Formoso</a></li><li class="item-231"><a href="/cbhlc-institucional/o-comite.html" >Lontra e Corda</a></li><li class="item-232"><a href="/cbhrma-institucional/o-comite.html" >Manuel Alves</a></li><li class="item-483"><a href="/cbhrp-institucional/o-comite.html" >Rio Palma</a></li><li class="item-233"><a href="/cbhsast-institucional/o-comite.html" >Santo Antônio e Santa Tereza</a></li></ul>
+		</div>
+			<div class="moduletable-ip">
+							<h2>Instituições Parceiras</h2>
+						
+
+<div class="custom-ip"  >
+	<figure data-wf-figure="1"><a href="https://www.to.gov.br/semarh/" target="_blank" rel="noopener"> <img src="/images/geral_new_tpl/smarh-to-new-v2023.png" alt="SMARH TO" width="510" height="86" class="img-smarh" title="SMARH TO" loading="lazy" /> </a> <img src="/images/geral_new_tpl/ci-lago.png" alt="ci lago" width="157" height="74" class="img-ciLago" /></figure></div>
+		</div>
+	
+            </div>
+        </section>
+        <div class="limpar"></div>
+	
+    	
+	
+    	
+	        <footer id="footer1000">
+            <div class="container">
+                		<div class="moduletable">
+						
+
+<div class="custom"  >
+	<p>Copyright <span id="copy-ano"></span> | CBHTO - Comitês de Bacias Hidrográficas do Estado do Tocantins | Todos os direitos reservados | <a href="http://www.wbweb.com.br" target="_blank" rel="noopener" title="WB Web Marketing Digital">WB Web Marketing Digital</a></p></div>
+		</div>
+	
+                <div class="limpar"></div>
+            </div>
+        </footer>
+        <script type="text/javascript">
+            document.getElementById("copy-ano").innerHTML = new Date().getFullYear();
+        </script>
+        <div class="limpar"></div>
+		
+	
+    
+    <!-- Função mapArea Responsivo - Posição 1005 -->
+    <script src="/templates/tpl_wbweb_new/js/funcao.area.map.js"></script>
+    <!-- Função Perguntas - Posição 1005 -->
+    <script src="/templates/tpl_wbweb_new/js/funcao.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a5968498b8300b63',t:'MTc5NDQ5Njc5Nw=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5968498b8300b63',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092" integrity="sha512-UKNk8GbxkABxKcXYuLkO16EleLGUkcvJWtpSNmExE0Too3ZaFAxTscNWEc1OdAv5/BikHawapSCaiD2XCmp+Bw==" data-cf-beacon='{"version":"2024.11.0","token":"40290677e6f049238b01bd64bb36fced","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
+</html>

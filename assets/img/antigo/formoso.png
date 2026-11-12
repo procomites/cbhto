@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Verificação de segurança</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    </head>
+<body>
+
+<br>
+<div class="container-fluid">
+
+    <center>
+        <img src="/img/d923032023rdw23u89u834_sec.png" title="Verificação de segurança" height="150">
+    </center>
+    <div class="jumbotron" style="max-width: 1024px; margin: 0 auto; padding: 25px;">
+        <h1 class="display-4 text-center">Verificação de segurança</h1>
+        <p class="lead">Seu IP fez diversas tentativas de acessos suspeitos a sites hospedados conosco.</p>
+        <hr>
+        <span id="showBlock">
+            <p>Para liberar o acesso<span id="ipText"></span>, responda ao desafio abaixo.</p>
+
+            <form id="formCaptcha" action="/_recaptcha-123908120/" method="POST" onsubmit="validateCaptcha(); return false;">
+                <input type="hidden" name="captchaHash" id="captchaHash" value="">
+                <input type="hidden" name="captchaServidor" id="captchaServidor" value="">
+                <input type="hidden" name="captchaDominio"  id="captchaDominio"  value="">
+                <table>
+                    <tr>
+                        <td width="50%" style="text-align: right; padding: 25px;">
+                            <span id='captchaPlace'></span><br>
+                            <a href='javascript:reloadCaptcha();'>[trocar imagem]</a> 
+                        </td>
+                        <td>
+                            <span class="text-muted">Digite a palavra na imagem ao lado no campo abaixo</span>
+                            <input type="text" name="captcha" id="captchaText" title="digite a imagem ao lado" value="" class="mt-2">
+                            <br><br>
+                            <input type="submit" id="btnSubmit" class="btn-md btn-primary btn-lg " value="Liberar acesso">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </span>
+        
+        <span id="showAllow" style="display: none;">
+            <center>
+                <div class="spinner-border text-success" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <h4>Obrigado!</h4>
+                <span class="text-muted">
+                    Sua IP está em liberação em nossos servidores.<br><br>
+                    Esta liberação pode demorar até 60 segundos, aguarde. 
+                </span>
+            </center>
+        </span>
+    </div>
+
+    <script type="text/javascript">
+        function loadInfo(){
+            $.ajax({type: "POST", url: "/_loadinfo-123908120/", data: $( "#formCaptcha" ).serialize(), dataType: "text", success: function (conteudo) { eval(conteudo); },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { reloadCaptcha(); } 
+            }); 
+        }
+
+        function validateCaptcha(){
+            document.getElementById('btnSubmit').disabled=true;
+            $.ajax({type: "POST", url: "https://wp-captcha.uni5.net/_recaptcha-123908120/", data: $( "#formCaptcha" ).serialize(), dataType: "text", success: function (conteudo) { eval(conteudo); } }); 
+        }
+        function reloadCaptcha(){
+            $.ajax({type: "GET", url: "https://wp-captcha.uni5.net/_recaptcha-123908120/", dataType: "text", success: function (conteudo) { eval(conteudo); } }); 
+        }
+        $( document ).ready(function() {
+            loadInfo(); 
+        });
+    </script>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+NOVO SITE CBHTO – Comitês de Bacias Hidrográficas do Tocantins
+Modelo inspirado no site do Fórum Nacional de Comitês (fncbh.org), com a identidade azul do CBHTO.
+Domínio previsto: cbhto.org · Hospedagem prevista: Cloudflare Pages
+=================================================================
+
+VER O SITE NO COMPUTADOR
+  Clique com o botão direito em "visualizar-site.ps1" > Executar com o PowerShell.
+  O navegador abre em http://localhost:8088. Feche a janela do PowerShell para parar.
+
+MENU E PÁGINAS
+  index.html        Início: destaques, os 7 comitês, mapa, últimas notícias, galeria
+  cbhto.html        CBHTO: sobre, o que é um comitê, dúvidas frequentes, apoio técnico
+  comite.html       Página de cada comitê (comite.html?c=cbhrf ...), com abas:
+                    O Comitê · Diretoria · Membros · Câmaras técnicas · Documentos ·
+                    Notícias · Fotos · Vídeos  (aba sem conteúdo não aparece)
+  documentos.html   SOMENTE documentos gerais do CBHTO, em pastas:
+                    Atas · Resoluções e deliberações · Legislação · Câmaras técnicas ·
+                    Listas de membros · Planos de bacia · Publicações · Acervo Ci Lago
+                    (os documentos de cada comitê ficam na aba Documentos do comitê)
+  noticias.html     Todas as notícias, com busca e filtros por comitê e ano
+  noticia.html      Notícia aberta (noticia.html?id=...)
+  galeria.html      Álbuns de fotos (galeria.html?id=... abre o álbum)
+  contato.html      Fale conosco
+
+ONDE EDITAR (pasta assets/js – abre no Bloco de Notas)
+  dados.js              Contatos (CONFIG), dados de cada comitê (nome, sede, área, criação,
+                        municípios, cor, logo, banner), dúvidas frequentes.
+                        >> Preencha CONFIG.email antes de publicar: o formulário usa esse e-mail.
+                        >> Para listar membros de um comitê, acrescente no comitê:
+                           composicao: [ { nome: 'Fulano', segmento: 'Usuários', instituicao: '...' } ],
+                        >> Diretoria em lista: diretoria: [ { nome: '...', cargo: 'Presidente', instituicao: '...' } ],
+  documentos-gerais.js  Documentos gerais do CBHTO (menu Documentos). Instruções no arquivo.
+  noticias.js           Notícias (geradas do site antigo). Para publicar uma nova, copie um
+                        bloco {...} e altere. Datas AAAA-MM-DD. Fotos em midia/.
+  documentos.js         Documentos dos comitês (gerados do site antigo).
+  galerias.js           Álbuns de fotos (gerados do site antigo).
+  conteudo.js           História, diretoria, câmaras técnicas e vídeos de cada comitê.
+  mapa.js               Mapa interativo. O contorno do CBHRCC veio da Base Hidrográfica
+                        Ottocodificada da ANA (ver pasta "Mapa CBHRCC").
+
+  noticias.js, documentos.js, galerias.js e conteudo.js são REFEITOS pelo script
+  gerar-conteudo.ps1 (lê a pasta "Backup site CBHTO"). Depois de editar à mão, não rode
+  o script de novo, ou guarde uma cópia antes.
+
+PASTA midia/
+  Fotos e arquivos copiados do site antigo (fotos grandes foram reduzidas para 1600 px).
+
+PUBLICAR NO CLOUDFLARE PAGES
+  O site é só de arquivos (HTML, CSS, JS, imagens, PDFs), sem banco de dados.
+  Limite do Cloudflare: 25 MB por arquivo. Os PDFs maiores que isso devem ficar no
+  Google Drive (ou serem comprimidos) e o link trocado em documentos.js.
+
+ANTES DE PUBLICAR
+  [ ] Preencher contatos em dados.js (CONFIG)
+  [ ] Conferir datas de criação do CBHRMA, CBHLC e CBHRCC e a área do CBHSAST e do CBHRCC
+  [ ] Mapa da bacia do Coco e Caiapó (assets/img/mapas/cbhrcc.jpg e campo "mapa" em dados.js)
+  [ ] Diretoria e membros atuais de cada comitê
+  [ ] Revisar o comitê atribuído a cada notícia (o script deduz pelo site antigo)
+  [ ] Não publicar documentos pessoais (RG, CPF, termos assinados) que estão em outras
+      pastas do PROCOMITÊS
