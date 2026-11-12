@@ -150,7 +150,36 @@
   }
 
   /* ---------- formulário ---------- */
-  function fecharModal() { const m = $('.fundo-modal'); if (m) m.remove(); const r = $('.rodape-modal'); if (r) r.remove(); document.body.style.overflow = ''; }
+  /* ---------- editor de texto rico (Jodit, licença MIT) ---------- */
+  let EDITOR = null;
+  function criarEditor(textarea, html) {
+    if (!window.Jodit) { textarea.value = html; textarea.rows = 14; return null; }
+    const ed = window.Jodit.make(textarea, {
+      language: 'pt_br', height: 460, minHeight: 300, toolbarAdaptive: true, toolbarSticky: false,
+      showCharsCounter: false, showWordsCounter: true, showXPathInStatusbar: false,
+      askBeforePasteHTML: false, askBeforePasteFromWord: false,
+      defaultActionOnPaste: 'insert_clear_html', defaultActionOnPasteFromWord: 'insert_clear_html',
+      buttons: ['paragraph', 'font', 'fontsize', 'lineHeight', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'brush', 'eraser', '|',
+        'ul', 'ol', 'outdent', 'indent', 'align', '|', 'table', 'image', 'link', 'hr', 'symbols', '|', 'undo', 'redo', 'selectall', 'copyformat', '|', 'preview', 'fullsize', 'source'],
+      removeButtons: ['file', 'video', 'print', 'about', 'spellcheck', 'speechRecognize', 'ai-commands', 'ai-assistant'],
+      controls: { font: { list: { 'Poppins,sans-serif': 'Poppins (padrão do site)', 'Arial,Helvetica,sans-serif': 'Arial', 'Georgia,serif': 'Georgia', "'Times New Roman',Times,serif": 'Times New Roman', 'Verdana,Geneva,sans-serif': 'Verdana' } } },
+      style: { fontFamily: 'Poppins, sans-serif', fontSize: '16px' },
+      image: { editSrc: false },
+      uploader: {
+        url: '/api/admin/upload', format: 'json', withCredentials: true,
+        filesVariableName: () => 'arquivo',
+        isSuccess: r => !!(r && r.ok),
+        getMessage: r => (r && r.erro) || 'Não foi possível enviar a imagem.',
+        process: r => ({ files: r && r.url ? [r.url] : [], path: '', baseurl: '', error: r && r.ok ? 0 : 1, msg: (r && r.erro) || '' }),
+        defaultHandlerSuccess: function (d) { (d.files || []).forEach(f => this.s.insertImage(f, null, 640)); },
+        defaultHandlerError: function (e) { aviso(e.message || 'Erro ao enviar a imagem.', true); }
+      }
+    });
+    ed.value = html || '';
+    return ed;
+  }
+
+  function fecharModal() { if (EDITOR) { try { EDITOR.destruct(); } catch { } EDITOR = null; } const m = $('.fundo-modal'); if (m) m.remove(); const r = $('.rodape-modal'); if (r) r.remove(); document.body.style.overflow = ''; }
   function formulario(tipo, item) {
     const N = tipo === 'noticias'; const novo = !item; item = item || {};
     const fixo = !admin();
@@ -169,8 +198,7 @@
       <div class="campo"><span class="rot">Foto de capa</span><div class="capa"><img id="f-capa-img" src="${esc(item.imagem ? (item.imagem.startsWith('/') || item.imagem.startsWith('http') ? item.imagem : '../' + item.imagem) : '../assets/img/antigo/cbhto-low.png')}" alt=""><div><input type="file" id="f-capa" accept="image/jpeg,image/png,image/webp"><div class="ajuda">JPG, PNG ou WebP, até 25 MB.</div>${item.imagem ? '<button class="btn linha peq" type="button" id="f-capa-tirar" style="margin-top:6px">Remover foto</button>' : ''}</div></div><input type="hidden" id="f-imagem" value="${esc(item.imagem || '')}"></div>
       <div class="campo"><label for="f-resumo">Resumo <span style="font-weight:400;color:var(--suave)">(aparece nos cartões; opcional)</span></label><textarea id="f-resumo" rows="2" maxlength="400">${esc(item.resumo || '')}</textarea></div>
       <div class="campo"><span class="rot">Texto da notícia</span>
-        <div class="ferramentas"><button type="button" data-cmd="bold"><b>N</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="formatBlock" data-v="h3">Subtítulo</button><button type="button" data-cmd="formatBlock" data-v="p">Parágrafo</button><button type="button" data-cmd="insertUnorderedList">• Lista</button><button type="button" data-cmd="insertOrderedList">1. Lista</button><button type="button" data-cmd="link">Link</button><button type="button" data-cmd="imagem">Imagem</button><button type="button" data-cmd="removeFormat">Limpar formatação</button><input type="file" id="f-img-texto" accept="image/jpeg,image/png,image/webp" hidden></div>
-        <div class="editor" id="f-html" contenteditable="true">${item.html || '<p><br></p>'}</div><div class="ajuda">Ao colar textos do Word ou de sites, a formatação estranha é removida automaticamente.</div></div>` : `
+        <textarea id="f-html"></textarea><div class="ajuda">Use a barra de ferramentas para formatar o texto e inserir tabelas, imagens e links. Ao colar do Word, a formatação é limpa automaticamente.</div></div>` : `
       <div class="campo"><label for="f-descricao">Descrição <span style="font-weight:400;color:var(--suave)">(opcional)</span></label><textarea id="f-descricao" rows="2" maxlength="500">${esc(item.descricao || '')}</textarea></div>
       <div class="linha2"><div class="campo"><label for="f-comite">Comitê</label>${fixo ? `<div>${chip(EU.comite)}</div><input type="hidden" id="f-comite" value="${esc(EU.comite)}">` : `<select id="f-comite"><option value="">Escolha…</option>${COMITES.map(c => `<option value="${c.id}" ${comiteDoc === c.id ? 'selected' : ''}>${c.sigla} – ${esc(c.curto || c.nome)}</option>`).join('')}<option value="cbhto" ${comiteDoc === 'cbhto' ? 'selected' : ''}>CBHTO – documento geral</option></select>`}</div>
         <div class="campo"><label for="f-categoria">Categoria</label><select id="f-categoria"></select></div></div>
@@ -185,18 +213,7 @@
     $('#f-cancelar').onclick = () => fecharModal();
     if ($('#f-recusar')) $('#f-recusar').onclick = async () => { fecharModal(); await acao(tipo, 'recusar', item); };
     if (N) {
-      const ed = $('#f-html');
-      $$('.ferramentas [data-cmd]').forEach(b => b.onclick = () => {
-        ed.focus(); const c = b.dataset.cmd;
-        if (c === 'link') { const u = prompt('Endereço do link (https://…):', 'https://'); if (u && /^https?:\/\//.test(u)) document.execCommand('createLink', false, u); return; }
-        if (c === 'imagem') { $('#f-img-texto').click(); return; }
-        document.execCommand(c, false, b.dataset.v ? `<${b.dataset.v}>` : null);
-      });
-      $('#f-img-texto').onchange = async e => { const r = await enviarArquivo(e.target); if (r) { ed.focus(); document.execCommand('insertHTML', false, `<p><img src="${esc(r.url)}" alt=""></p>`); } };
-      ed.addEventListener('paste', e => {  // cola como texto limpo, mantendo os parágrafos
-        e.preventDefault(); const t = (e.clipboardData || window.clipboardData).getData('text/plain');
-        document.execCommand('insertHTML', false, t.split(/\n{2,}|\r\n\r\n/).map(p => `<p>${esc(p).replace(/\n/g, '<br>')}</p>`).join(''));
-      });
+      EDITOR = criarEditor($('#f-html'), item.html || '');
       $('#f-capa').onchange = async e => { const r = await enviarArquivo(e.target); if (r) { $('#f-imagem').value = r.url; $('#f-capa-img').src = r.url; } };
       if ($('#f-capa-tirar')) $('#f-capa-tirar').onclick = () => { $('#f-imagem').value = ''; $('#f-capa-img').src = '../assets/img/antigo/cbhto-low.png'; };
     } else {
@@ -207,7 +224,7 @@
     }
     $('#f-salvar').onclick = async () => {
       const b = { titulo: $('#f-titulo').value.trim(), legado: item.legado ? 1 : 0 };
-      if (N) Object.assign(b, { data: $('#f-data').value, comites: fixo ? [EU.comite] : $$('.opcoes-comites input:checked').map(i => i.value), imagem: $('#f-imagem').value, resumo: $('#f-resumo').value.trim(), html: $('#f-html').innerHTML });
+      if (N) Object.assign(b, { data: $('#f-data').value, comites: fixo ? [EU.comite] : $$('.opcoes-comites input:checked').map(i => i.value), imagem: $('#f-imagem').value, resumo: $('#f-resumo').value.trim(), html: EDITOR ? EDITOR.value : $('#f-html').value });
       else Object.assign(b, { descricao: $('#f-descricao').value.trim(), comite: $('#f-comite').value, categoria: $('#f-categoria').value, ano: $('#f-ano').value, arquivo: $('#f-link').value.trim() });
       const btn = $('#f-salvar'); btn.disabled = true;
       try {

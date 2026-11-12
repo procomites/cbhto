@@ -87,7 +87,19 @@ export async function usuarioAtual(request, env) {
 }
 
 // ---------- limpeza do texto das notícias (impede scripts e código estranho) ----------
-const PERMITIDAS = new Set(['p', 'br', 'b', 'strong', 'i', 'em', 'u', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4', 'blockquote', 'img', 'figure', 'figcaption', 'hr', 'table', 'thead', 'tbody', 'tr', 'td', 'th']);
+const PERMITIDAS = new Set(['p', 'br', 'b', 'strong', 'i', 'em', 'u', 's', 'strike', 'sub', 'sup', 'span', 'div', 'ul', 'ol', 'li', 'a', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'code', 'img', 'figure', 'figcaption', 'hr', 'table', 'caption', 'colgroup', 'col', 'thead', 'tbody', 'tfoot', 'tr', 'td', 'th']);
+// Estilos aceitos do editor (cores, tamanhos, alinhamento, tabelas); o resto é descartado
+const ESTILOS = new Set(['color', 'background-color', 'font-size', 'font-family', 'font-weight', 'font-style', 'text-decoration', 'text-decoration-line', 'text-align', 'vertical-align', 'line-height', 'width', 'height', 'max-width', 'border', 'border-color', 'border-style', 'border-width', 'border-collapse', 'padding', 'padding-left', 'margin-left', 'float', 'display', 'margin', 'list-style-type']);
+function limparEstilo(css) {
+  return String(css || '').split(';').map(d => {
+    const i = d.indexOf(':'); if (i < 0) return '';
+    const p = d.slice(0, i).trim().toLowerCase(), v = d.slice(i + 1).trim();
+    if (!ESTILOS.has(p) || !v || v.length > 120) return '';
+    if (/url\s*\(|expression|javascript:|@import|[<>{}\\]/i.test(v)) return '';
+    if (!/^[#\w\s,.%()\-"'+/]+$/.test(v)) return '';
+    return `${p}: ${v}`;
+  }).filter(Boolean).join('; ');
+}
 const REMOVER = new Set(['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'svg', 'math', 'video', 'audio', 'noscript', 'template', 'base', 'frame', 'frameset', 'title', 'head']);
 const urlSegura = (v, img) => img ? /^(https:\/\/|\/arquivos\/|\/?midia\/)/i.test(v) : /^(https?:\/\/|mailto:|\/(?!\/)|noticia\.html|comite\.html|documentos\.html)/i.test(v);
 export async function limparHTML(html) {
@@ -99,8 +111,10 @@ export async function limparHTML(html) {
         if (!PERMITIDAS.has(t)) { el.removeAndKeepContent(); return; }
         for (const [nome] of [...el.attributes]) {
           const v = (el.getAttribute(nome) || '').trim();
+          if (nome === 'style') { const s = limparEstilo(v); if (s) el.setAttribute('style', s); else el.removeAttribute('style'); continue; }
           const ok = (t === 'a' && nome === 'href' && urlSegura(v, false)) || (t === 'img' && nome === 'src' && urlSegura(v, true)) ||
-            (t === 'img' && nome === 'alt') || ((t === 'td' || t === 'th') && (nome === 'colspan' || nome === 'rowspan') && /^\d{1,2}$/.test(v));
+            (t === 'img' && nome === 'alt') || ((t === 'img' || t === 'col' || t === 'td' || t === 'th' || t === 'table') && (nome === 'width' || nome === 'height') && /^\d{1,4}%?$/.test(v)) ||
+            ((t === 'td' || t === 'th') && (nome === 'colspan' || nome === 'rowspan') && /^\d{1,2}$/.test(v));
           if (!ok) el.removeAttribute(nome);
         }
         if (t === 'a') { el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener'); }

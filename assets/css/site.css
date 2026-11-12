@@ -392,3 +392,9 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
   .rodape .colunas{grid-template-columns:1fr}
   .apoio-card{grid-template-columns:1fr}
 }
+
+/* tabelas e imagens do editor do painel */
+.texto-rico table{border-collapse:collapse;width:100%;margin:1.2em 0;font-size:.95rem;display:block;overflow-x:auto}
+.texto-rico td,.texto-rico th{border:1px solid #cfd8e3;padding:8px 10px;vertical-align:top}
+.texto-rico th{background:#f3f6fa}
+.texto-rico img{max-width:100%;height:auto}
