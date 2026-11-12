@@ -375,6 +375,7 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
   .slide-cbhto .wrap{grid-template-columns:1fr}
   .slide-cbhto .logos7{display:none}
   .car-seta{display:none}
+  .slide{aspect-ratio:2/1}
 }
 @media (max-width:640px){
   .secao{padding:52px 0}
@@ -398,3 +399,8 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
 .texto-rico td,.texto-rico th{border:1px solid #cfd8e3;padding:8px 10px;vertical-align:top}
 .texto-rico th{background:#f3f6fa}
 .texto-rico img{max-width:100%;height:auto}
+
+/* evita que formulários e colunas passem da largura da tela no celular */
+.com-lateral>*{min-width:0}
+.form,.form label{min-width:0;max-width:100%}
+.form input,.form select,.form textarea{width:100%;max-width:100%;box-sizing:border-box}
