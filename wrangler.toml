@@ -1,0 +1,22 @@
+# Configuração do Cloudflare Pages (site + painel de publicação)
+name = "cbhto"
+pages_build_output_dir = "."
+compatibility_date = "2026-10-01"
+
+# Banco de dados do painel (notícias, documentos, usuários, histórico)
+[[d1_databases]]
+binding = "DB"
+database_name = "cbhto"
+database_id = "00000000-0000-0000-0000-000000000000"   # trocar pelo ID criado no Cloudflare
+
+# Arquivos enviados pelo painel (PDFs e fotos)
+[[r2_buckets]]
+binding = "ARQUIVOS"
+bucket_name = "cbhto-arquivos"
+
+[vars]
+# Administradores principais (separados por vírgula). Sempre têm acesso total.
+ADMIN_EMAILS = "procomites@gmail.com"
+# Preencher após configurar o Cloudflare Access (Zero Trust):
+ACCESS_TEAM_DOMAIN = ""   # ex.: cbhto.cloudflareaccess.com
+ACCESS_AUD = ""           # "Application Audience (AUD) Tag" da aplicação /admin

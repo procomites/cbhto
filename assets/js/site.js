@@ -439,7 +439,29 @@
   };
 
   /* ---------- início ---------- */
+  /* ---------- conteúdo publicado pelo painel (/admin) ---------- */
+  async function conteudoDoPainel() {
+    if (!/^https?:$/.test(location.protocol)) return;
+    try {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3500);
+      const r = await fetch('/api/conteudo', { signal: ctl.signal, headers: { accept: 'application/json' } }); clearTimeout(t);
+      if (!r.ok || !(r.headers.get('content-type') || '').includes('json')) return;
+      const j = await r.json();
+      const chaveDoc = d => d.id || ('arq:' + d.arquivo);
+      const remN = new Set((j.removidos && j.removidos.noticias) || []), remD = new Set((j.removidos && j.removidos.documentos) || []);
+      const novasN = j.noticias || [], novosD = j.documentos || [];
+      const idsN = new Set(novasN.map(n => String(n.id))), idsD = new Set(novosD.map(d => d.id));
+      for (let i = NOTICIAS.length - 1; i >= 0; i--) { const id = String(NOTICIAS[i].id); if (remN.has(id) || idsN.has(id)) NOTICIAS.splice(i, 1); }
+      NOTICIAS.push(...novasN); NOTICIAS.sort((a, b) => (b.data || '').localeCompare(a.data || ''));
+      for (const lista of [DOCS, GERAIS]) for (let i = lista.length - 1; i >= 0; i--) { const k = chaveDoc(lista[i]); if (remD.has(k) || idsD.has(k)) lista.splice(i, 1); }
+      DOCS.push(...novosD);
+    } catch (e) { /* sem painel: usa só o conteúdo fixo */ }
+  }
+
   cabecalho(); rodape();
   const pg = document.body.dataset.pagina;
-  if (P[pg]) P[pg]();
+  if (P[pg]) {
+    if (['inicio', 'comite', 'documentos', 'noticias', 'noticia'].includes(pg)) conteudoDoPainel().then(() => P[pg]());
+    else P[pg]();
+  }
 })();
