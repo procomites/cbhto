@@ -194,7 +194,8 @@
       <div><h4>Publicações</h4><ul><li><a href="noticias.html">Notícias</a></li><li><a href="galeria.html">Galeria de fotos</a></li><li><a href="contato.html">Fale conosco</a></li></ul></div>
     </div>
     <div class="apoio"><span>Apoio</span><img src="assets/img/logos/semarh_governo_to_negativo.svg" alt="SEMARH – Governo do Tocantins"><a href="cbhto.html#apoio"><img src="assets/img/logos/procomites_negativo.svg" alt="Procomitês Tocantins"></a></div></div>
-    <div class="copy"><div class="wrap"><span>© ${new Date().getFullYear()} CBHTO – Comitês de Bacias Hidrográficas do Estado do Tocantins</span><span>Todos os direitos reservados</span></div></div></footer>
+    <div class="copy"><div class="wrap"><span>© ${new Date().getFullYear()} CBHTO – Comitês de Bacias Hidrográficas do Estado do Tocantins</span><span>Todos os direitos reservados</span></div>
+    <div class="wrap creditos-fotos">Fotos dos banners do CBHTO, CBHRP e CBHRCC via Wikimedia Commons, licença <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt-br" target="_blank" rel="noopener">CC BY-SA</a>: Edson Carvalho (Rio Tocantins), Ruan Lion (Rio Araguaia, Caseara), Jorge Lansarin (Parque Estadual do Cantão) e Alexandre Marino (Rio Azuis e Serras Gerais).</div></div></footer>
     <button class="subir" aria-label="Voltar ao topo">${I.cima}</button>`;
     const s = $('.subir');
     s.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
@@ -208,8 +209,7 @@
     // carrossel
     const car = $('#carrossel');
     if (car) {
-      const slides = [`<a class="slide slide-cbhto" href="cbhto.html"><div class="wrap"><div><span class="tag-novo">Agora são 7 comitês</span><h2>Comitês de Bacias Hidrográficas do Tocantins</h2><p>Poder público, usuários de água e sociedade civil decidindo juntos o uso e a proteção dos rios do estado.</p><span class="btn btn-claro">Conheça os comitês ${I.dir}</span></div>
-        <div class="logos7">${COMITES.map(c => `<span><img src="${c.logo}" alt="${c.sigla}"></span>`).join('')}<span style="background:transparent"></span></div></div></a>`]
+      const slides = [`<a class="slide" href="cbhto.html"><img src="assets/img/banners/banner-cbhto-7-comites.jpg" alt="Comitês de Bacias Hidrográficas do Tocantins – 7 comitês"></a>`]
         .concat(COMITES.map(c => c.banner
           ? `<a class="slide" href="comite.html?c=${c.id}"><img src="${c.banner}" alt="${esc(c.nome)}"></a>`
           : `<a class="slide slide-gerado" href="comite.html?c=${c.id}" style="background:linear-gradient(115deg,var(--marinho) 0%,${c.cor} 130%)"><div class="wrap"><span class="selo"><img src="${c.logo}" alt=""></span><div>${c.novo ? '<span class="tag-novo">Novo comitê</span>' : ''}<h2>${esc(c.nome)}</h2><p>${esc(c.resumo)}</p></div></div></a>`));
@@ -305,7 +305,7 @@
     } else if (s === 'diretoria') {
       const tab = dirAtual.length ? `<div class="tabela-rolagem"><table class="membros"><tr><th>Cargo</th><th>Nome</th><th>Instituição</th></tr>${dirAtual.map(m => `<tr><td><b>${esc(m.cargo || '')}</b></td><td>${esc(m.nome)}</td><td>${esc(m.instituicao || '')}</td></tr>`).join('')}</table></div>` : '';
       const contato = K.email ? `<p class="nota-tabela">Contato do comitê: <a href="mailto:${esc(K.email)}">${esc(K.email)}</a>${K.mandato ? ' · Mandato ' + esc(K.mandato) : ''}</p>` : '';
-      const antigo = x.diretoria ? (tab ? `<details class="camara"><summary>Diretorias anteriores (registro do site antigo)</summary><div class="texto-rico">${x.diretoria}</div></details>` : `<div class="texto-rico">${x.diretoria}</div>`) : '';
+      const antigo = x.diretoria ? (tab ? `<details class="camara"><summary>Diretorias anteriores</summary><div class="texto-rico">${x.diretoria}</div></details>` : `<div class="texto-rico">${x.diretoria}</div>`) : '';
       sec.innerHTML = titulo('Diretoria') + tab + contato + antigo;
     } else if (s === 'membros') {
       let html = '';
