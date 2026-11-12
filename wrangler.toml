@@ -7,12 +7,12 @@ compatibility_date = "2026-10-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "cbhto"
-database_id = "00000000-0000-0000-0000-000000000000"   # trocar pelo ID criado no Cloudflare
+database_id = "b815a1ff-6004-4685-87c8-cec949cb0e57"
 
-# Arquivos enviados pelo painel (PDFs e fotos)
-[[r2_buckets]]
+# Arquivos enviados pelo painel (PDFs e fotos, até 25 MB cada) – Workers KV
+[[kv_namespaces]]
 binding = "ARQUIVOS"
-bucket_name = "cbhto-arquivos"
+id = "0d6eb6dae2d04a3aba8dd3c7e7f658fb"
 
 [vars]
 # Administradores principais (separados por vírgula). Sempre têm acesso total.

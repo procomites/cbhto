@@ -164,7 +164,7 @@ async function conteudo(tipo, id, acao, m, request, env, u) {
 
 // ---------- envio de arquivos (R2) ----------
 async function upload(request, env, u) {
-  if (!env.ARQUIVOS) return erro('Armazenamento de arquivos (R2) não configurado.', 500);
+  if (!env.ARQUIVOS) return erro('Armazenamento de arquivos (KV) não configurado.', 500);
   const fd = await request.formData(); const f = fd.get('arquivo');
   if (!f || typeof f === 'string') return erro('Nenhum arquivo recebido.');
   if (f.size > LIMITE_MB * 1024 * 1024) return erro(`O arquivo passa de ${LIMITE_MB} MB. Comprima antes de enviar.`);
@@ -172,7 +172,7 @@ async function upload(request, env, u) {
   if (!tipo) return erro('Tipo de arquivo não permitido. Use PDF, imagem (JPG, PNG, WebP), Word, Excel ou ODT.');
   const base = f.name.replace(/\.[^.]+$/, '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase().slice(0, 60) || 'arquivo';
   const d = new Date(); const chave = `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${Math.random().toString(36).slice(2, 8)}-${base}.${ext}`;
-  await env.ARQUIVOS.put(chave, f.stream(), { httpMetadata: { contentType: tipo }, customMetadata: { nome: f.name.slice(0, 120), enviadoPor: u.email } });
+  await env.ARQUIVOS.put(chave, await f.arrayBuffer(), { metadata: { tipo, nome: f.name.slice(0, 120), enviadoPor: u.email } });
   await registrar(env, u, 'enviou arquivo', 'arquivo', chave, f.name);
   return json({ ok: true, url: '/arquivos/' + chave, nome: f.name, tamanho: f.size });
 }
