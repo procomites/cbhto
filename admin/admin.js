@@ -60,13 +60,13 @@
   async function iniciar() {
     try { EU = await api('eu'); }
     catch (e) {
-      $('#app').innerHTML = `<div class="bloqueio"><img src="../assets/img/antigo/cbhto-low.png" alt="CBHTO" style="height:46px"><h1 style="margin-top:18px">Painel de publicação</h1>
+      $('#app').innerHTML = `<div class="bloqueio"><img src="../assets/img/marca/cbhto-azul.png" alt="CBHTO" style="height:46px"><h1 style="margin-top:18px">Painel de publicação</h1>
         <p>${esc(e.message)}</p><p><a class="btn" href="/admin/">Tentar novamente</a> <a class="btn linha" href="/">Voltar ao site</a></p></div>`;
       return;
     }
     const nomeComite = EU.comite && porId[EU.comite] ? porId[EU.comite].sigla : '';
     $('#app').innerHTML = `
-      <header class="topo"><img src="../assets/img/antigo/cbhto.png" alt="CBHTO"><div class="titulo">Painel de publicação<small>Comitês de Bacias Hidrográficas do Tocantins</small></div>
+      <header class="topo"><img src="../assets/img/marca/cbhto-branco.png" alt="CBHTO"><div class="titulo">Painel de publicação<small>Comitês de Bacias Hidrográficas do Tocantins</small></div>
         <div class="quem"><b>${esc(EU.nome || EU.email)}</b>${esc(EU.nomePerfil || PERFIL[EU.perfil])}${nomeComite ? ' · ' + nomeComite : ''}</div>
         <a href="/" target="_blank" rel="noopener">Ver o site</a><a href="/cdn-cgi/access/logout">Sair</a></header>
       <nav class="abas" id="abas"></nav><main id="tela"></main>`;
@@ -199,7 +199,7 @@
       ${N ? `
       <div class="linha2"><div class="campo"><label for="f-data">Data</label><input type="date" id="f-data" value="${esc((item.data || hoje()).slice(0, 10))}"></div>
         <div class="campo"><span class="rot">Comitês</span>${fixo ? `<div>${chip(EU.comite)}</div>` : `<div class="opcoes-comites">${COMITES.map(c => `<label><input type="checkbox" value="${c.id}" ${comitesSel.includes(c.id) ? 'checked' : ''}> ${c.sigla}</label>`).join('')}</div><div class="ajuda">Sem nenhum marcado, a notícia aparece como geral do CBHTO.</div>`}</div></div>
-      <div class="campo"><span class="rot">Foto de capa</span><div class="capa"><img id="f-capa-img" src="${esc(item.imagem ? (item.imagem.startsWith('/') || item.imagem.startsWith('http') ? item.imagem : '../' + item.imagem) : '../assets/img/antigo/cbhto-low.png')}" alt=""><div><input type="file" id="f-capa" accept="image/jpeg,image/png,image/webp"><div class="ajuda">JPG, PNG ou WebP, até 25 MB.</div>${item.imagem ? '<button class="btn linha peq" type="button" id="f-capa-tirar" style="margin-top:6px">Remover foto</button>' : ''}</div></div><input type="hidden" id="f-imagem" value="${esc(item.imagem || '')}"></div>
+      <div class="campo"><span class="rot">Foto de capa</span><div class="capa"><img id="f-capa-img" src="${esc(item.imagem ? (item.imagem.startsWith('/') || item.imagem.startsWith('http') ? item.imagem : '../' + item.imagem) : '../assets/img/marca/cbhto-azul.png')}" alt=""><div><input type="file" id="f-capa" accept="image/jpeg,image/png,image/webp"><div class="ajuda">JPG, PNG ou WebP, até 25 MB.</div>${item.imagem ? '<button class="btn linha peq" type="button" id="f-capa-tirar" style="margin-top:6px">Remover foto</button>' : ''}</div></div><input type="hidden" id="f-imagem" value="${esc(item.imagem || '')}"></div>
       <div class="campo"><label for="f-resumo">Resumo <span style="font-weight:400;color:var(--suave)">(aparece nos cartões; opcional)</span></label><textarea id="f-resumo" rows="2" maxlength="400">${esc(item.resumo || '')}</textarea></div>
       <div class="campo"><span class="rot">Texto da notícia</span>
         <textarea id="f-html"></textarea><div class="ajuda">Use a barra de ferramentas para formatar o texto e inserir tabelas, imagens e links. Ao colar do Word, a formatação é limpa automaticamente.</div></div>` : `
@@ -219,7 +219,7 @@
     if (N) {
       EDITOR = criarEditor($('#f-html'), item.html || '');
       $('#f-capa').onchange = async e => { const r = await enviarArquivo(e.target); if (r) { $('#f-imagem').value = r.url; $('#f-capa-img').src = r.url; } };
-      if ($('#f-capa-tirar')) $('#f-capa-tirar').onclick = () => { $('#f-imagem').value = ''; $('#f-capa-img').src = '../assets/img/antigo/cbhto-low.png'; };
+      if ($('#f-capa-tirar')) $('#f-capa-tirar').onclick = () => { $('#f-imagem').value = ''; $('#f-capa-img').src = '../assets/img/marca/cbhto-azul.png'; };
     } else {
       const sc = $('#f-comite'), cat = $('#f-categoria');
       const encherCats = () => { const lista = sc.value === 'cbhto' ? CATS_GERAIS : CATS_COMITE; cat.innerHTML = `<option value="">Escolha…</option>` + lista.map(c => `<option ${item.categoria === c ? 'selected' : ''}>${c}</option>`).join(''); };

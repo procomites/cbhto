@@ -14,7 +14,7 @@
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
   const param = k => new URLSearchParams(location.search).get(k);
   const dataBR = d => d ? d.split('-').reverse().join('/') : '';
-  const LOGO_BRANCO = 'assets/img/antigo/cbhto.png';
+  const LOGO_BRANCO = 'assets/img/marca/cbhto-branco.png';
 
   /* ---------- ícones ---------- */
   const I = {
@@ -67,7 +67,7 @@
 
   /* ---------- peças reutilizáveis ---------- */
   const chip = id => { const c = porId[id]; return c ? `<a class="chip" style="--c:${c.cor}" href="comite.html?c=${c.id}">${c.sigla}</a>` : ''; };
-  const fotoNoticia = n => n.imagem ? `<img src="${esc(n.imagem)}" alt="" loading="lazy">` : `<div class="foto-vazia"><img src="assets/img/antigo/cbhto-low.png" alt=""></div>`;
+  const fotoNoticia = n => n.imagem ? `<img src="${esc(n.imagem)}" alt="" loading="lazy">` : `<div class="foto-vazia"><img src="assets/img/marca/cbhto-azul.png" alt=""></div>`;
   function cardNoticia(n) {
     const url = 'noticia.html?id=' + n.id;
     return `<article class="card-nt"><a class="foto" href="${url}" tabindex="-1" aria-hidden="true">${fotoNoticia(n)}</a>
@@ -229,7 +229,7 @@
     // mapa
     const mp = $('#mapa');
     if (mp && window.MAPA_SVG) {
-      mp.innerHTML = `<div class="mapa"><img src="assets/img/antigo/mapa-cbhto.png" alt="Mapa do Tocantins com as bacias dos comitês" width="746" height="1223">${window.MAPA_SVG}</div>`;
+      mp.innerHTML = `<div class="mapa">${window.MAPA_SVG}</div>`;
       const lista = $('#lista-mapa');
       lista.innerHTML = COMITES.map(c => `<a href="comite.html?c=${c.id}" data-c="${c.id}" style="--c:${c.cor}"><span class="cor"></span><span><b>${c.sigla}${c.novo ? ' · novo' : ''}</b><small>${esc(c.curto)} · sede em ${esc(c.sede)}</small></span></a>`).join('');
       const foco = (id, on) => { $$(`[data-c="${id}"]`).forEach(e => e.classList.toggle('foco', on)); };
