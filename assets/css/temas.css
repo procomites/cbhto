@@ -1,0 +1,68 @@
+/* ==========================================================================
+   CBHTO – temas de cor e banners em camadas
+   O tema ativo é escolhido pelo administrador no painel (aba Aparência).
+   Cada tema troca só as cores abaixo; logos e cores dos comitês não mudam.
+   ========================================================================== */
+:root{
+  --ban-s1:#eef9fc; --ban-s2:#b2ecf4;            /* preenchimento do contorno da bacia (de cima para baixo) */
+  --ban-somb:#08303e;                            /* sombra em volta do contorno */
+  --ban-t1:rgba(255,196,120,.15); --ban-t2:rgba(0,170,190,.27);  /* tinta sobre as fotos (esquerda, direita) */
+  --faixa-bg:var(--verde); --faixa-cor:#fff;     /* faixa da campanha no topo */
+  --rodape-fim:color-mix(in srgb,var(--marinho) 78%,#000);
+  --suave:color-mix(in srgb,var(--azul) 10%,#fff);
+}
+
+/* Mulheres das Águas – rosa suave, com destaque azul-água */
+[data-tema="mulheres"]{
+  --marinho:#7a2f52; --marinho-2:#94416a; --azul:#b0527d; --azul-2:#c66f97; --ciano:#dc8fb0; --ciano-2:#f6cfe0;
+  --verde:#9be3e8; --verde-escuro:#2f8f98; --fundo:#fdf6f9; --borda:#f3e1ea;
+  --ban-s1:#fff8fb; --ban-s2:#f7d6e4; --ban-somb:#5a2039; --ban-t1:rgba(255,205,222,.18); --ban-t2:rgba(190,95,140,.18);
+  --faixa-bg:#b0527d;
+}
+/* Dia Mundial da Água – azul-água vivo */
+[data-tema="agua"]{
+  --marinho:#003b73; --marinho-2:#004f96; --azul:#0072bd; --azul-2:#1e90e0; --ciano:#00a9dc; --ciano-2:#7fe0ff;
+  --verde:#37d6c9; --verde-escuro:#0c8f86; --fundo:#eef8fd; --borda:#d6eaf5;
+  --ban-s1:#f0fbff; --ban-s2:#a5e6fb; --ban-somb:#052f4d; --ban-t1:rgba(120,220,255,.16); --ban-t2:rgba(0,120,200,.28);
+  --faixa-bg:#0072bd;
+}
+/* Semana do Meio Ambiente – verde */
+[data-tema="ambiente"]{
+  --marinho:#0f3d24; --marinho-2:#165233; --azul:#1d7a45; --azul-2:#2c9a5a; --ciano:#49b86f; --ciano-2:#a7e3b9;
+  --verde:#c6e04a; --verde-escuro:#5f8f1c; --fundo:#f1f8f2; --borda:#d9eadc;
+  --ban-s1:#f3fbf4; --ban-s2:#bfe8c8; --ban-somb:#0c2e1b; --ban-t1:rgba(220,235,120,.16); --ban-t2:rgba(30,140,80,.26);
+  --faixa-bg:#1d7a45;
+}
+/* Setembro Amarelo – base grafite, amarelo só como destaque (texto escuro sobre amarelo) */
+[data-tema="amarelo"]{
+  --marinho:#23272e; --marinho-2:#2f353e; --azul:#3d4651; --azul-2:#56616f; --ciano:#c79a00; --ciano-2:#ffe27a;
+  --verde:#f5c400; --verde-escuro:#8a6d00; --fundo:#fffbea; --borda:#f1e7bf;
+  --ban-s1:#fffef6; --ban-s2:#fff1b0; --ban-somb:#3a3200; --ban-t1:rgba(255,215,80,.20); --ban-t2:rgba(120,100,20,.22);
+  --faixa-bg:#f5c400; --faixa-cor:#23272e;
+}
+/* Outubro Rosa */
+[data-tema="rosa"]{
+  --marinho:#9b2c5e; --marinho-2:#b23a70; --azul:#c9427f; --azul-2:#db6297; --ciano:#e884ad; --ciano-2:#fbd3e2;
+  --verde:#ffd3e3; --verde-escuro:#c9427f; --fundo:#fff6fa; --borda:#f8e0ea;
+  --ban-s1:#fff8fb; --ban-s2:#fbd5e3; --ban-somb:#6a1c40; --ban-t1:rgba(255,205,220,.18); --ban-t2:rgba(215,80,135,.18);
+  --faixa-bg:#c9427f;
+}
+/* Novembro Azul */
+[data-tema="novembro"]{
+  --marinho:#0a2351; --marinho-2:#12327a; --azul:#1f4fb8; --azul-2:#3a6fe0; --ciano:#4f8ff5; --ciano-2:#a9c8ff;
+  --verde:#7fb2ff; --verde-escuro:#2a5fc4; --fundo:#f1f5fd; --borda:#dbe5f7;
+  --ban-s1:#f2f6ff; --ban-s2:#b9d0fb; --ban-somb:#081a3d; --ban-t1:rgba(150,190,255,.16); --ban-t2:rgba(30,70,190,.28);
+  --faixa-bg:#1f4fb8;
+}
+
+/* ---------- banner em camadas ---------- */
+.banner-svg{display:block;width:100%;height:100%}
+.ban-s1{stop-color:var(--ban-s1)} .ban-s2{stop-color:var(--ban-s2)}
+.ban-t1{stop-color:var(--ban-t1)} .ban-t2{stop-color:var(--ban-t2)}
+.ban-somb{fill:var(--ban-somb);opacity:.42}
+.ban-frase{font-family:Poppins,Arial,sans-serif;font-size:25px;fill:var(--marinho);text-anchor:middle}
+.ban-disco{fill:#fff;stroke:rgba(0,0,0,.08);stroke-width:1}
+
+/* ---------- faixa da campanha ---------- */
+.faixa-campanha{background:var(--faixa-bg);color:var(--faixa-cor);text-align:center;font-size:.9rem;font-weight:600;padding:8px 16px;line-height:1.35}
+.faixa-campanha a{color:inherit;text-decoration:underline;text-underline-offset:2px}

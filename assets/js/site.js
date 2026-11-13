@@ -208,10 +208,11 @@
     // carrossel
     const car = $('#carrossel');
     if (car) {
-      const slides = [`<a class="slide" href="cbhto.html"><img src="assets/img/banners/banner-cbhto-7-comites.jpg" alt="Comitês de Bacias Hidrográficas do Tocantins – 7 comitês"></a>`]
-        .concat(COMITES.map(c => c.banner
-          ? `<a class="slide" href="comite.html?c=${c.id}"><img src="${c.banner}" alt="${esc(c.nome)}"></a>`
-          : `<a class="slide slide-gerado" href="comite.html?c=${c.id}" style="background:linear-gradient(115deg,var(--marinho) 0%,${c.cor} 130%)"><div class="wrap"><span class="selo"><img src="${c.logo}" alt=""></span><div>${c.novo ? '<span class="tag-novo">Novo comitê</span>' : ''}<h2>${esc(c.nome)}</h2><p>${esc(c.resumo)}</p></div></div></a>`));
+      const AP = window.APARENCIA, BN = window.BANNERS || {};
+      const slideBan = (id, href, rotulo, k) => AP && BN[id] ? `<a class="slide" href="${href}">${AP.banner(id, { rotulo, adiar: k > 0 })}</a>` : '';
+      const slides = [slideBan('cbhto', 'cbhto.html', 'Comitês de Bacias Hidrográficas do Tocantins – 7 comitês', 0)]
+        .concat(COMITES.map((c, k) => slideBan(c.id, 'comite.html?c=' + c.id, c.nome, k + 1) ||
+          `<a class="slide slide-gerado" href="comite.html?c=${c.id}" style="background:linear-gradient(115deg,var(--marinho) 0%,${c.cor} 130%)"><div class="wrap"><span class="selo"><img src="${c.logo}" alt=""></span><div><h2>${esc(c.nome)}</h2><p>${esc(c.resumo)}</p></div></div></a>`)).filter(Boolean);
       car.innerHTML = `<div class="slides">${slides.join('')}</div><button class="car-seta ant" aria-label="Anterior">${I.esq}</button><button class="car-seta prox" aria-label="Próximo">${I.dir}</button><div class="car-pontos">${slides.map((_, i) => `<button aria-label="Slide ${i + 1}"></button>`).join('')}</div>`;
       let i = 0, t; const n = slides.length, trilho = $('.slides', car), pts = $$('.car-pontos button', car);
       const vai = k => { i = (k + n) % n; trilho.style.transform = `translateX(-${i * 100}%)`; pts.forEach((p, j) => p.classList.toggle('ativo', j === i)); };
@@ -222,6 +223,7 @@
       let x0 = null; car.addEventListener('touchstart', e => x0 = e.touches[0].clientX, { passive: true });
       car.addEventListener('touchend', e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) { vai(i + (dx < 0 ? 1 : -1)); auto(); } x0 = null; });
       vai(0); auto();
+      setTimeout(() => AP && AP.carregarAdiadas(car), 1200);   // fotos dos outros slides
     }
     // logos
     const lg = $('#logos');
@@ -278,7 +280,7 @@
     let s = param('s'); if (!secoes.find(q => q[0] === s)) s = 'comite';
     document.title = `${c.sigla} – ${c.nome} | CBHTO`;
     $('#conteudo').innerHTML = `
-      <section class="cab-comite" style="--c:${c.cor}">${c.banner ? `<img class="banner" src="${c.banner}" alt="">` : ''}
+      <section class="cab-comite" style="--c:${c.cor}">${window.APARENCIA && (window.BANNERS || {})[c.id] ? `<div class="banner">${window.APARENCIA.banner(c.id, { rotulo: c.nome, sufixo: '-cab' })}</div>` : ''}
         <div class="info"><div class="wrap"><span class="selo"><img src="${c.logo}" alt="${c.sigla}"></span><div>
           <div class="trilha"><a href="index.html">Início</a> › <a href="cbhto.html">Comitês</a> › ${c.sigla}</div>
           <h1>${esc(c.nome)}</h1><p class="resumo">${c.novo ? '<span class="tag-novo" style="margin:0 8px 0 0">Novo</span>' : ''}${esc(c.resumo)}</p></div></div></div></section>
@@ -439,6 +441,11 @@
   };
 
   /* ---------- início ---------- */
+  P.creditos = function () {
+    const ul = $('#creditos-fotos'); if (!ul || !window.APARENCIA) return;
+    ul.innerHTML = window.APARENCIA.creditos().map(c => `<li>${esc(c.titulo)} – ${esc(c.credito)}</li>`).join('');
+  };
+
   /* ---------- conteúdo publicado pelo painel (/admin) ---------- */
   async function conteudoDoPainel() {
     if (!/^https?:$/.test(location.protocol)) return;
@@ -447,6 +454,7 @@
       const r = await fetch('/api/conteudo', { signal: ctl.signal, headers: { accept: 'application/json' } }); clearTimeout(t);
       if (!r.ok || !(r.headers.get('content-type') || '').includes('json')) return;
       const j = await r.json();
+      if (window.APARENCIA) window.APARENCIA.aplicar(j.aparencia);
       const chaveDoc = d => d.id || ('arq:' + d.arquivo);
       const remN = new Set((j.removidos && j.removidos.noticias) || []), remD = new Set((j.removidos && j.removidos.documentos) || []);
       const novasN = j.noticias || [], novosD = j.documentos || [];
@@ -460,8 +468,7 @@
 
   cabecalho(); rodape();
   const pg = document.body.dataset.pagina;
-  if (P[pg]) {
-    if (['inicio', 'comite', 'documentos', 'noticias', 'noticia'].includes(pg)) conteudoDoPainel().then(() => P[pg]());
-    else P[pg]();
-  }
+  // páginas que mostram conteúdo ou fotos do painel esperam a resposta; as outras só atualizam o tema
+  if (['inicio', 'comite', 'documentos', 'noticias', 'noticia', 'creditos'].includes(pg)) conteudoDoPainel().then(() => P[pg] && P[pg]());
+  else { if (P[pg]) P[pg](); conteudoDoPainel(); }
 })();

@@ -1,6 +1,7 @@
 // /api/admin/... – painel de publicação (exige login pelo Cloudflare Access).
 // Perfis: admin (tudo) · presidente e secretario (notícias e documentos do próprio comitê, com aprovação do admin).
 import { json, erro, preparar, usuarioAtual, limparHTML, registrar, texto, urlArquivo, agora, novoId, origemValida, COMITES, PERFIS, NOME_PERFIL } from '../../_lib.js';
+import { rotaAparencia, rotaSugestoes } from '../../_aparencia.js';
 
 const CATS_COMITE = ['Atas de reuniões', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Estudos e publicações', 'Diversos', 'Outros arquivos'];
 const CATS_GERAIS = ['Atas', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Publicações'];
@@ -28,9 +29,12 @@ export async function onRequest({ request, env, params }) {
         env.DB.prepare("SELECT COUNT(*) n FROM noticias WHERE status='pendente'" + (admin ? '' : ' AND comites LIKE ?')).bind(...(admin ? [] : [`%"${u.comite}"%`])),
         env.DB.prepare("SELECT COUNT(*) n FROM documentos WHERE status='pendente'" + (admin ? '' : ' AND comite = ?')).bind(...(admin ? [] : [u.comite]))
       ]);
-      return json({ pendentesNoticias: r[0].results[0].n, pendentesDocumentos: r[1].results[0].n });
+      const sg = admin ? await env.DB.prepare("SELECT COUNT(*) n FROM sugestoes WHERE status='pendente'").first() : { n: 0 };
+      return json({ pendentesNoticias: r[0].results[0].n, pendentesDocumentos: r[1].results[0].n, pendentesSugestoes: sg.n });
     }
     if (rec === 'noticias' || rec === 'documentos') return await conteudo(rec, id, acao, m, request, env, u);
+    if (rec === 'aparencia') return await rotaAparencia(m, request, env, u);
+    if (rec === 'sugestoes') return await rotaSugestoes(id, acao, m, request, env, u);
     if (rec === 'upload' && m === 'POST') return await upload(request, env, u);
     if (rec === 'usuarios') { if (!admin) return erro('Apenas o administrador pode gerenciar usuários.', 403); return await usuarios(id, m, request, env, u); }
     if (rec === 'historico' && m === 'GET') {

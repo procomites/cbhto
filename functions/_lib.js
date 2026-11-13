@@ -28,7 +28,11 @@ export async function preparar(env) {
       id TEXT PRIMARY KEY, titulo TEXT, descricao TEXT, comite TEXT, categoria TEXT, ano TEXT, arquivo TEXT,
       status TEXT, autor TEXT, criado_em TEXT, atualizado_em TEXT, revisado_por TEXT, motivo TEXT, legado INTEGER DEFAULT 0)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS historico (
-      id INTEGER PRIMARY KEY AUTOINCREMENT, quando TEXT, email TEXT, acao TEXT, tipo TEXT, item_id TEXT, titulo TEXT)`)
+      id INTEGER PRIMARY KEY AUTOINCREMENT, quando TEXT, email TEXT, acao TEXT, tipo TEXT, item_id TEXT, titulo TEXT)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS config (chave TEXT PRIMARY KEY, valor TEXT)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS sugestoes (
+      id TEXT PRIMARY KEY, banner TEXT, lado TEXT, src TEXT, foco TEXT, titulo TEXT, credito TEXT,
+      autor TEXT, status TEXT, motivo TEXT, criado_em TEXT, revisado_por TEXT)`)
   ]);
   pronto = true;
 }
@@ -76,7 +80,7 @@ export async function usuarioAtual(request, env) {
   let email = null;
   const url = new URL(request.url);
   // Somente para testes no computador (wrangler pages dev). Nunca é usado no site publicado.
-  if (env.DEV_EMAIL && env.CF_PAGES_BRANCH === 'local' && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) email = String(env.DEV_EMAIL).toLowerCase();
+  if (env.DEV_EMAIL && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')) email = String(env.DEV_EMAIL).toLowerCase();
   else {
     const token = request.headers.get('cf-access-jwt-assertion') || cookie(request, 'CF_Authorization');
     if (!token || !env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return null;

@@ -74,15 +74,17 @@
   }
   async function montarAbas() {
     let r = { pendentesNoticias: 0, pendentesDocumentos: 0 }; try { r = await api('resumo'); } catch { }
-    const pend = r.pendentesNoticias + r.pendentesDocumentos;
+    const pend = r.pendentesNoticias + r.pendentesDocumentos + (r.pendentesSugestoes || 0);
     const abas = [['noticias', 'Notícias'], ['documentos', 'Documentos']];
-    if (admin()) abas.push(['aprovacoes', 'Aprovações' + (pend ? `<span class="cont">${pend}</span>` : '')], ['usuarios', 'Usuários'], ['historico', 'Histórico']);
+    if (admin()) abas.push(['aprovacoes', 'Aprovações' + (pend ? `<span class="cont">${pend}</span>` : '')], ['aparencia', 'Aparência'], ['usuarios', 'Usuários'], ['historico', 'Histórico']);
+    else if (EU.comite) abas.push(['banner', 'Banner do comitê']);
     $('#abas').innerHTML = abas.map(a => `<button data-aba="${a[0]}" class="${a[0] === ABA ? 'ativo' : ''}">${a[1]}</button>`).join('');
     $$('#abas button').forEach(b => b.onclick = () => abrir(b.dataset.aba));
   }
   function abrir(aba) {
     ABA = aba; $$('#abas button').forEach(b => b.classList.toggle('ativo', b.dataset.aba === aba));
-    ({ noticias: () => telaConteudo('noticias'), documentos: () => telaConteudo('documentos'), aprovacoes: telaAprovacoes, usuarios: telaUsuarios, historico: telaHistorico })[aba]();
+    ({ noticias: () => telaConteudo('noticias'), documentos: () => telaConteudo('documentos'), aprovacoes: telaAprovacoes, usuarios: telaUsuarios, historico: telaHistorico,
+      aparencia: () => window.PAINEL_TELAS.aparencia(), banner: () => window.PAINEL_TELAS.banner() })[aba]();
   }
 
   /* ---------- notícias e documentos ---------- */
@@ -244,7 +246,8 @@
   /* ---------- aprovações ---------- */
   async function telaAprovacoes() {
     const tela = $('#tela');
-    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div>`;
+    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div><div id="sugestoes"></div>`;
+    window.PAINEL_TELAS.sugestoes($('#sugestoes'));
     try {
       const [n, d] = await Promise.all([api('noticias?status=pendente'), api('documentos?status=pendente')]);
       const itens = n.map(x => Object.assign(x, { tipo: 'noticias', comites: JSON.parse(x.comites || '[]') })).concat(d.map(x => Object.assign(x, { tipo: 'documentos' })));
@@ -313,5 +316,7 @@
     } catch (e) { $('#lista').innerHTML = `<div class="vazio">${esc(e.message)}</div>`; }
   }
 
+  // ferramentas compartilhadas com aparencia-painel.js
+  window.PAINEL = { api, aviso, esc, $, $$, chip, admin, COMITES, porId, enviarArquivo, fecharModal, carregarScript, montarAbas, abrir: a => abrir(a), get EU() { return EU; } };
   iniciar();
 })();
