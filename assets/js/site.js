@@ -289,7 +289,9 @@
     const sec = $('#sec');
     const titulo = t => `<div class="cab-secao"><h2>${t}</h2></div>`;
     if (s === 'comite') {
-      const hist = x.historia || (c.texto || []).map(p => `<p>${esc(p)}</p>`).join('');
+      // mesmo formato em todos os comitês: imagem da área da bacia, título e descrição
+      const base = x.historia || '<h2>Quem somos</h2>' + (c.texto || []).map(p => `<p>${esc(p)}</p>`).join('');
+      const hist = /<img/.test(base) || !c.mapa ? base : `<img src="${esc(c.mapa)}" alt="Área de abrangência | ${esc(c.curto || c.sigla)}">` + base;
       const temImg = /<img/.test(hist);
       sec.innerHTML = `<div class="com-lateral"><div class="texto-rico">${hist}</div>
         <aside class="ficha"><h3>Ficha do comitê</h3><dl>
@@ -455,6 +457,17 @@
       if (!r.ok || !(r.headers.get('content-type') || '').includes('json')) return;
       const j = await r.json();
       if (window.APARENCIA) window.APARENCIA.aplicar(j.aparencia);
+      // páginas dos comitês editadas pelo painel
+      for (const [id, d] of Object.entries(j.comites || {})) {
+        const c = porId[id]; if (!c || !d) continue;
+        ['resumo', 'sede', 'regiao', 'area', 'criacao'].forEach(k => { if (typeof d[k] === 'string' && d[k]) c[k] = d[k]; });
+        if (d.mapa) c.mapa = d.mapa;
+        if (Array.isArray(d.municipios) && d.municipios.length) c.municipios = d.municipios;
+        if (d.historia) { CONT[id] = CONT[id] || {}; CONT[id].historia = d.historia; }
+        const W = window.COMPOSICAO = window.COMPOSICAO || {}; W[id] = W[id] || {};
+        if (d.email) W[id].email = d.email;
+        if (Array.isArray(d.diretoria) && d.diretoria.length) W[id].diretoria = d.diretoria;
+      }
       const chaveDoc = d => d.id || ('arq:' + d.arquivo);
       const remN = new Set((j.removidos && j.removidos.noticias) || []), remD = new Set((j.removidos && j.removidos.documentos) || []);
       const novasN = j.noticias || [], novosD = j.documentos || [];

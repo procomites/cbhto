@@ -100,3 +100,12 @@ h2.sec,h3.sec{font-size:1.05rem;color:var(--marinho);margin:30px 0 6px}
 .grade-fotos span{display:block;font-size:.72rem;padding:4px 6px;color:var(--suave);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 img.mini{width:120px;aspect-ratio:3/2;object-fit:cover;border-radius:8px;display:block}
 @media (max-width:760px){.banner-linha{grid-template-columns:1fr}}
+
+/* ---------- aviso de pendências e edição de páginas ---------- */
+.notif{max-width:1180px;margin:16px auto 0;padding:0 20px}
+.notif{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.notif>span{flex:1;background:#fff3d6;border:1px solid #f3dca0;border-radius:10px;padding:10px 14px;font-size:.9rem}
+.dir-linha{display:grid;grid-template-columns:1fr 1.4fr 1.6fr auto;gap:8px;margin-bottom:8px}
+.mapa-atual{max-width:260px;border-radius:10px;border:1px solid var(--borda);display:block;margin-bottom:8px}
+.mudou{font-size:.78rem;color:var(--suave)}
+@media (max-width:760px){.dir-linha{grid-template-columns:1fr}}

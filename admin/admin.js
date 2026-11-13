@@ -69,22 +69,26 @@
       <header class="topo"><img src="../assets/img/marca/cbhto-branco.png" alt="CBHTO"><div class="titulo">Painel de publicação<small>Comitês de Bacias Hidrográficas do Tocantins</small></div>
         <div class="quem"><b>${esc(EU.nome || EU.email)}</b>${esc(EU.nomePerfil || PERFIL[EU.perfil])}${nomeComite ? ' · ' + nomeComite : ''}</div>
         <a href="/" target="_blank" rel="noopener">Ver o site</a><a href="/cdn-cgi/access/logout">Sair</a></header>
-      <nav class="abas" id="abas"></nav><main id="tela"></main>`;
+      <nav class="abas" id="abas"></nav><div id="notif"></div><main id="tela"></main>`;
     await montarAbas(); abrir(ABA);
   }
   async function montarAbas() {
     let r = { pendentesNoticias: 0, pendentesDocumentos: 0 }; try { r = await api('resumo'); } catch { }
-    const pend = r.pendentesNoticias + r.pendentesDocumentos + (r.pendentesSugestoes || 0);
+    const pend = r.pendentesNoticias + r.pendentesDocumentos + (r.pendentesSugestoes || 0) + (r.pendentesPaginas || 0);
+    // aviso ao administrador quando há algo aguardando aprovação
+    const nf = $('#notif');
+    if (nf) { nf.innerHTML = admin() && pend ? `<div class="notif"><span><b>${pend} ${pend === 1 ? 'item aguarda' : 'itens aguardam'} a sua aprovação.</b> ${[[r.pendentesNoticias, 'notícia(s)'], [r.pendentesDocumentos, 'documento(s)'], [r.pendentesPaginas, 'edição(ões) de página'], [r.pendentesSugestoes, 'foto(s) de banner']].filter(x => x[0]).map(x => x[0] + ' ' + x[1]).join(' · ')}</span><button class="btn peq" id="notif-ver">Ver aprovações</button></div>` : '';
+      const bv = $('#notif-ver'); if (bv) bv.onclick = () => abrir('aprovacoes'); }
     const abas = [['noticias', 'Notícias'], ['documentos', 'Documentos']];
-    if (admin()) abas.push(['aprovacoes', 'Aprovações' + (pend ? `<span class="cont">${pend}</span>` : '')], ['aparencia', 'Aparência'], ['usuarios', 'Usuários'], ['historico', 'Histórico']);
-    else if (EU.comite) abas.push(['banner', 'Banner do comitê']);
+    if (admin()) abas.push(['aprovacoes', 'Aprovações' + (pend ? `<span class="cont">${pend}</span>` : '')], ['paginas', 'Páginas dos comitês'], ['aparencia', 'Aparência'], ['usuarios', 'Usuários'], ['historico', 'Histórico']);
+    else if (EU.comite) abas.push(['paginas', 'Página do comitê'], ['banner', 'Banner do comitê']);
     $('#abas').innerHTML = abas.map(a => `<button data-aba="${a[0]}" class="${a[0] === ABA ? 'ativo' : ''}">${a[1]}</button>`).join('');
     $$('#abas button').forEach(b => b.onclick = () => abrir(b.dataset.aba));
   }
   function abrir(aba) {
     ABA = aba; $$('#abas button').forEach(b => b.classList.toggle('ativo', b.dataset.aba === aba));
     ({ noticias: () => telaConteudo('noticias'), documentos: () => telaConteudo('documentos'), aprovacoes: telaAprovacoes, usuarios: telaUsuarios, historico: telaHistorico,
-      aparencia: () => window.PAINEL_TELAS.aparencia(), banner: () => window.PAINEL_TELAS.banner() })[aba]();
+      aparencia: () => window.PAINEL_TELAS.aparencia(), paginas: () => window.PAINEL_TELAS.paginas(), banner: () => window.PAINEL_TELAS.banner() })[aba]();
   }
 
   /* ---------- notícias e documentos ---------- */
@@ -246,7 +250,8 @@
   /* ---------- aprovações ---------- */
   async function telaAprovacoes() {
     const tela = $('#tela');
-    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div><div id="sugestoes"></div>`;
+    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div><div id="pag-pendentes"></div><div id="sugestoes"></div>`;
+    window.PAINEL_TELAS.paginasPendentes($('#pag-pendentes'));
     window.PAINEL_TELAS.sugestoes($('#sugestoes'));
     try {
       const [n, d] = await Promise.all([api('noticias?status=pendente'), api('documentos?status=pendente')]);
@@ -317,6 +322,6 @@
   }
 
   // ferramentas compartilhadas com aparencia-painel.js
-  window.PAINEL = { api, aviso, esc, $, $$, chip, admin, COMITES, porId, enviarArquivo, fecharModal, carregarScript, montarAbas, abrir: a => abrir(a), get EU() { return EU; } };
+  window.PAINEL = { api, aviso, esc, $, $$, chip, admin, COMITES, porId, enviarArquivo, fecharModal, carregarScript, criarEditor, montarAbas, abrir: a => abrir(a), get EU() { return EU; } };
   iniciar();
 })();

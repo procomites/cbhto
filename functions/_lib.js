@@ -30,6 +30,9 @@ export async function preparar(env) {
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS historico (
       id INTEGER PRIMARY KEY AUTOINCREMENT, quando TEXT, email TEXT, acao TEXT, tipo TEXT, item_id TEXT, titulo TEXT)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS config (chave TEXT PRIMARY KEY, valor TEXT)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS paginas (comite TEXT PRIMARY KEY, dados TEXT, autor TEXT, atualizado_em TEXT)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS paginas_pendentes (
+      id TEXT PRIMARY KEY, comite TEXT, dados TEXT, autor TEXT, status TEXT, motivo TEXT, criado_em TEXT, revisado_por TEXT)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS sugestoes (
       id TEXT PRIMARY KEY, banner TEXT, lado TEXT, src TEXT, foco TEXT, titulo TEXT, credito TEXT,
       autor TEXT, status TEXT, motivo TEXT, criado_em TEXT, revisado_por TEXT)`)
@@ -109,7 +112,7 @@ function limparEstilo(css) {
   }).filter(Boolean).join('; ');
 }
 const REMOVER = new Set(['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'svg', 'math', 'video', 'audio', 'noscript', 'template', 'base', 'frame', 'frameset', 'title', 'head']);
-const urlSegura = (v, img) => img ? /^(https:\/\/|\/arquivos\/|\/?midia\/)/i.test(v) : /^(https?:\/\/|mailto:|\/(?!\/)|noticia\.html|comite\.html|documentos\.html)/i.test(v);
+const urlSegura = (v, img) => img ? /^(https:\/\/|\/arquivos\/|\/?midia\/|\/?assets\/img\/)/i.test(v) : /^(https?:\/\/|mailto:|\/(?!\/)|noticia\.html|comite\.html|documentos\.html)/i.test(v);
 export async function limparHTML(html) {
   const resp = new HTMLRewriter()
     .on('*', {

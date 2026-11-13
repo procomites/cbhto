@@ -1,6 +1,7 @@
 // GET /api/conteudo – notícias e documentos publicados pelo painel (lido pelo site público).
 import { json, preparar } from '../_lib.js';
 import { lerAparencia } from '../_aparencia.js';
+import { paginasPublicadas } from '../_paginas.js';
 
 export async function onRequestGet({ env }) {
   try {
@@ -20,7 +21,8 @@ export async function onRequestGet({ env }) {
       documentos.push({ id: r.id, titulo: r.titulo, descricao: r.descricao || '', comite: r.comite, categoria: r.categoria, ano: r.ano || '', arquivo: r.arquivo });
     }
     const aparencia = await lerAparencia(env);
-    return json({ noticias, documentos, removidos, aparencia }, 200, { 'cache-control': 'public, max-age=60' });
+    const comites = await paginasPublicadas(env);
+    return json({ noticias, documentos, removidos, aparencia, comites }, 200, { 'cache-control': 'public, max-age=60' });
   } catch (e) {
     return json({ noticias: [], documentos: [], removidos: { noticias: [], documentos: [] }, aviso: 'painel não configurado' }, 200);
   }

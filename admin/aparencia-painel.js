@@ -188,5 +188,5 @@
     });
   }
 
-  window.PAINEL_TELAS = { aparencia: telaAparencia, banner: telaBanner, sugestoes };
+  window.PAINEL_TELAS = Object.assign(window.PAINEL_TELAS || {}, { aparencia: telaAparencia, banner: telaBanner, sugestoes });
 })();
