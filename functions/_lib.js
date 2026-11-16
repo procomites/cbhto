@@ -30,6 +30,7 @@ export async function preparar(env) {
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS historico (
       id INTEGER PRIMARY KEY AUTOINCREMENT, quando TEXT, email TEXT, acao TEXT, tipo TEXT, item_id TEXT, titulo TEXT)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS config (chave TEXT PRIMARY KEY, valor TEXT)`),
+    env.DB.prepare(`CREATE TABLE IF NOT EXISTS agenda (id TEXT PRIMARY KEY, comite TEXT, titulo TEXT, data TEXT, hora TEXT, local TEXT, descricao TEXT, link TEXT, status TEXT, autor TEXT, motivo TEXT, criado_em TEXT, revisado_por TEXT)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS paginas (comite TEXT PRIMARY KEY, dados TEXT, autor TEXT, atualizado_em TEXT)`),
     env.DB.prepare(`CREATE TABLE IF NOT EXISTS paginas_pendentes (
       id TEXT PRIMARY KEY, comite TEXT, dados TEXT, autor TEXT, status TEXT, motivo TEXT, criado_em TEXT, revisado_por TEXT)`),

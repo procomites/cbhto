@@ -74,21 +74,22 @@
   }
   async function montarAbas() {
     let r = { pendentesNoticias: 0, pendentesDocumentos: 0 }; try { r = await api('resumo'); } catch { }
-    const pend = r.pendentesNoticias + r.pendentesDocumentos + (r.pendentesSugestoes || 0) + (r.pendentesPaginas || 0);
+    const pend = r.pendentesNoticias + r.pendentesDocumentos + (r.pendentesSugestoes || 0) + (r.pendentesPaginas || 0) + (r.pendentesAgenda || 0);
     // aviso ao administrador quando há algo aguardando aprovação
     const nf = $('#notif');
-    if (nf) { nf.innerHTML = admin() && pend ? `<div class="notif"><span><b>${pend} ${pend === 1 ? 'item aguarda' : 'itens aguardam'} a sua aprovação.</b> ${[[r.pendentesNoticias, 'notícia(s)'], [r.pendentesDocumentos, 'documento(s)'], [r.pendentesPaginas, 'edição(ões) de página'], [r.pendentesSugestoes, 'foto(s) de banner']].filter(x => x[0]).map(x => x[0] + ' ' + x[1]).join(' · ')}</span><button class="btn peq" id="notif-ver">Ver aprovações</button></div>` : '';
+    if (nf) { nf.innerHTML = admin() && pend ? `<div class="notif"><span><b>${pend} ${pend === 1 ? 'item aguarda' : 'itens aguardam'} a sua aprovação.</b> ${[[r.pendentesNoticias, 'notícia(s)'], [r.pendentesDocumentos, 'documento(s)'], [r.pendentesPaginas, 'edição(ões) de página'], [r.pendentesSugestoes, 'foto(s) de banner'], [r.pendentesAgenda, 'evento(s) da agenda']].filter(x => x[0]).map(x => x[0] + ' ' + x[1]).join(' · ')}</span><button class="btn peq" id="notif-ver">Ver aprovações</button></div>` : '';
       const bv = $('#notif-ver'); if (bv) bv.onclick = () => abrir('aprovacoes'); }
-    const abas = [['noticias', 'Notícias'], ['documentos', 'Documentos']];
+    const ICONES = {"noticias":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 5h13v14H6a2 2 0 0 1-2-2z\"/><path d=\"M17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5\"/></svg>","documentos":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z\"/><path d=\"M14 3v6h6\"/></svg>","agenda":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M16 3v4M8 3v4M3 10h18\"/></svg>","aprovacoes":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8 12 3 3 5-6\"/></svg>","paginas":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M3 9h18M8 14h8\"/></svg>","aparencia":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3a9 9 0 1 0 0 18c1.5 0 2-1 2-2s-.5-1.5-.5-2.5S14.5 15 16 15h2a3 3 0 0 0 3-3c0-5-4-9-9-9z\"/><circle cx=\"7.5\" cy=\"11\" r=\"1\"/><circle cx=\"12\" cy=\"7.5\" r=\"1\"/><circle cx=\"16.5\" cy=\"11\" r=\"1\"/></svg>","banner":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"m3 16 5-5 4 4 3-3 6 6\"/></svg>","usuarios":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"9\" cy=\"8\" r=\"4\"/><path d=\"M2 21a7 7 0 0 1 14 0M17 4a4 4 0 0 1 0 8M22 21a7 7 0 0 0-4-6\"/></svg>","historico":"<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M12 7v5l3 2\"/></svg>"};
+    const abas = [['noticias', 'Notícias'], ['documentos', 'Documentos'], ['agenda', 'Agenda']];
     if (admin()) abas.push(['aprovacoes', 'Aprovações' + (pend ? `<span class="cont">${pend}</span>` : '')], ['paginas', 'Páginas dos comitês'], ['aparencia', 'Aparência'], ['usuarios', 'Usuários'], ['historico', 'Histórico']);
     else if (EU.comite) abas.push(['paginas', 'Página do comitê'], ['banner', 'Banner do comitê']);
-    $('#abas').innerHTML = abas.map(a => `<button data-aba="${a[0]}" class="${a[0] === ABA ? 'ativo' : ''}">${a[1]}</button>`).join('');
+    $('#abas').innerHTML = abas.map(a => `<button data-aba="${a[0]}" class="${a[0] === ABA ? 'ativo' : ''}">${ICONES[a[0]] || ''}${a[1]}</button>`).join('');
     $$('#abas button').forEach(b => b.onclick = () => abrir(b.dataset.aba));
   }
   function abrir(aba) {
     ABA = aba; $$('#abas button').forEach(b => b.classList.toggle('ativo', b.dataset.aba === aba));
     ({ noticias: () => telaConteudo('noticias'), documentos: () => telaConteudo('documentos'), aprovacoes: telaAprovacoes, usuarios: telaUsuarios, historico: telaHistorico,
-      aparencia: () => window.PAINEL_TELAS.aparencia(), paginas: () => window.PAINEL_TELAS.paginas(), banner: () => window.PAINEL_TELAS.banner() })[aba]();
+      aparencia: () => window.PAINEL_TELAS.aparencia(), paginas: () => window.PAINEL_TELAS.paginas(), agenda: () => window.PAINEL_TELAS.agenda(), banner: () => window.PAINEL_TELAS.banner() })[aba]();
   }
 
   /* ---------- notícias e documentos ---------- */
@@ -250,7 +251,8 @@
   /* ---------- aprovações ---------- */
   async function telaAprovacoes() {
     const tela = $('#tela');
-    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div><div id="pag-pendentes"></div><div id="sugestoes"></div>`;
+    tela.innerHTML = `<h1>Aprovações</h1><p class="sub">Notícias e documentos enviados por presidentes e secretários, aguardando a sua revisão.</p><div class="cartao" id="lista"><div class="vazio">Carregando…</div></div><div id="pag-pendentes"></div><div id="ag-pendentes"></div><div id="sugestoes"></div>`;
+    window.PAINEL_TELAS.agendaPendentes($('#ag-pendentes'));
     window.PAINEL_TELAS.paginasPendentes($('#pag-pendentes'));
     window.PAINEL_TELAS.sugestoes($('#sugestoes'));
     try {

@@ -110,3 +110,21 @@ img.mini{width:120px;aspect-ratio:3/2;object-fit:cover;border-radius:8px;display
 .mapa-atual{max-width:260px;border-radius:10px;border:1px solid var(--borda);display:block;margin-bottom:8px}
 .mudou{font-size:.78rem;color:var(--suave)}
 @media (max-width:760px){.dir-linha{grid-template-columns:1fr}}
+
+/* ---------- polimento do painel ---------- */
+.abas button{display:inline-flex;align-items:center;gap:7px}
+.abas button svg{width:17px;height:17px;flex:none}
+h1{font-size:1.5rem}
+.sub{font-size:1rem;max-width:75ch}
+.campo{margin-bottom:20px}
+.campo>label,.campo>.rot{font-size:.95rem}
+.campo .ajuda{font-size:.85rem}
+input[type=text],input[type=email],input[type=date],input[type=time],input[type=number],input[type=url],input[type=search],select,textarea{padding:11px 13px;font-size:1rem}
+input[type=time]{border:1.5px solid var(--borda);border-radius:10px;background:#fff;width:100%;color:var(--texto)}
+.btn{padding:10px 20px;font-size:.95rem}
+.btn.peq{padding:7px 14px;font-size:.875rem}
+th{font-size:.8125rem}
+td{font-size:.95rem}
+td .meta{font-size:.85rem}
+.selo{font-size:.8125rem;padding:3px 11px}
+@media (max-width:760px){.btn.peq{padding:9px 14px}td.acoes .btn{margin:4px 6px 0 0}}

@@ -2,6 +2,7 @@
 import { json, preparar } from '../_lib.js';
 import { lerAparencia } from '../_aparencia.js';
 import { paginasPublicadas } from '../_paginas.js';
+import { agendaPublicada } from '../_agenda.js';
 
 export async function onRequestGet({ env }) {
   try {
@@ -22,7 +23,8 @@ export async function onRequestGet({ env }) {
     }
     const aparencia = await lerAparencia(env);
     const comites = await paginasPublicadas(env);
-    return json({ noticias, documentos, removidos, aparencia, comites }, 200, { 'cache-control': 'public, max-age=60' });
+    let agenda = []; try { agenda = await agendaPublicada(env); } catch { }
+    return json({ noticias, documentos, removidos, aparencia, comites, agenda }, 200, { 'cache-control': 'public, max-age=60' });
   } catch (e) {
     return json({ noticias: [], documentos: [], removidos: { noticias: [], documentos: [] }, aviso: 'painel não configurado' }, 200);
   }

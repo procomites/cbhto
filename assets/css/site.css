@@ -469,3 +469,46 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
 .card-nt h3,.destaque h3{text-wrap:pretty}
 .doc b{font-weight:600}
 .ficha dd.mun{padding-left:0}
+
+/* ---- Etapa 4: agenda de reuniões e busca ---- */
+.secao-agenda{padding-bottom:0}
+.agenda{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.evento{display:flex;gap:16px;background:#fff;border:1px solid var(--borda);border-left:5px solid var(--c,var(--azul));border-radius:var(--raio);padding:18px}
+.evento .dia{flex:none;width:62px;text-align:center;font-family:var(--f-titulo);color:var(--marinho);line-height:1.1}
+.evento .dia b{display:block;font-size:1.75rem;font-weight:700}
+.evento .dia span{display:block;text-transform:uppercase;font-size:.875rem;font-weight:600;letter-spacing:.05em}
+.evento .dia small{display:block;font-family:var(--f-texto);font-size:.8125rem;color:var(--cinza);margin-top:3px}
+.evento .txt{min-width:0;flex:1}
+.evento h3{font-size:1.0625rem;margin:0 0 6px}
+.evento p{margin:0 0 8px;font-size:.9375rem;color:var(--cinza)}
+.evento .onde{display:flex;gap:6px;align-items:flex-start;color:var(--texto)}
+.evento .onde svg{width:16px;height:16px;flex:none;margin-top:4px;color:var(--azul)}
+.agenda-comite{margin-bottom:36px}
+.agenda-comite h2{font-size:1.25rem}
+.abre-busca{order:1;flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(255,255,255,.75);background:none;color:#fff;display:grid;place-items:center;padding:0;transition:.2s}
+.abre-busca:hover{background:#fff;color:var(--azul)}
+.abre-busca svg{width:18px;height:18px}
+.topo .redes{order:2}
+.busca{position:fixed;inset:0;z-index:120;background:rgba(3,20,40,.72);display:flex;justify-content:center;align-items:flex-start;padding:8vh 16px 16px}
+.busca-cx{background:#fff;border-radius:16px;width:min(680px,100%);max-height:84vh;display:flex;flex-direction:column;box-shadow:var(--sombra-2);overflow:hidden}
+.busca-campo{display:flex;align-items:center;gap:10px;padding:12px 14px 12px 18px;border-bottom:1px solid var(--borda)}
+.busca-campo>svg{width:20px;height:20px;color:var(--azul);flex:none}
+.busca-campo input{flex:1;min-width:0;border:0;font:inherit;font-size:1.0625rem;padding:10px 0;outline:none;background:none;color:var(--texto)}
+.busca-fechar{width:44px;height:44px;border-radius:50%;border:0;background:var(--fundo);color:var(--marinho);display:grid;place-items:center;flex:none}
+.busca-fechar svg{width:18px;height:18px}
+.busca-res{overflow-y:auto;padding:8px 10px 14px}
+.busca-res h3{font-size:.8125rem;text-transform:uppercase;letter-spacing:.07em;color:var(--cinza);margin:14px 10px 4px;font-family:var(--f-texto)}
+.busca-res h3 small{background:var(--fundo);border-radius:99px;padding:1px 8px;margin-left:4px}
+.busca-res a{display:block;padding:10px;border-radius:10px;text-decoration:none;color:var(--texto)}
+.busca-res a:hover,.busca-res a:focus-visible{background:var(--fundo)}
+.busca-res a b{display:block;font-weight:600;color:var(--marinho);line-height:1.35}
+.busca-res a small{display:block;color:var(--cinza);font-size:.875rem}
+.busca-dica,.busca-mais{color:var(--cinza);padding:10px;margin:0;font-size:.9375rem}
+@media (max-width:1020px){
+  .abre-busca{order:0;margin-left:auto;border:0;width:48px;height:48px}
+  .abre-busca svg{width:24px;height:24px}
+  .abre-menu{margin-left:0}
+  .topo .wrap{gap:4px}
+}
+@media (max-width:640px){.evento{padding:14px;gap:12px}.evento .dia{width:52px}.busca{padding:0}.busca-cx{border-radius:0;max-height:100%;height:100%;width:100%}}
+.busca[hidden]{display:none}

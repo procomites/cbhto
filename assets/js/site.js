@@ -244,6 +244,7 @@
       $$('#mapa svg a').forEach(a => { const c = porId[a.dataset.c]; if (c) { const tt = document.createElementNS('http://www.w3.org/2000/svg', 'title'); tt.textContent = c.sigla + ' – ' + c.nome; a.prepend(tt); } });
     }
     // notícias
+    agendaInicio();
     const ul = $('#ultimas');
     if (ul) {
       const [d, ...resto] = NOTICIAS.filter(n => n.imagem).slice(0, 1).concat(NOTICIAS.filter((n, i) => true));
@@ -298,7 +299,7 @@
       const base = x.historia || '<h2>Quem somos</h2>' + (c.texto || []).map(p => `<p>${esc(p)}</p>`).join('');
       const hist = /<img/.test(base) || !c.mapa ? base : `<img src="${esc(c.mapa)}" alt="Área de abrangência | ${esc(c.curto || c.sigla)}">` + base;
       const temImg = /<img/.test(hist);
-      sec.innerHTML = `<div class="com-lateral"><div class="texto-rico">${hist}</div>
+      sec.innerHTML = `${agendaComite(c.id)}<div class="com-lateral"><div class="texto-rico">${hist}</div>
         <aside class="ficha"><h3>Ficha do comitê</h3><dl>
           <div><dt>${I.sigla}Sigla</dt><dd>${c.sigla}</dd></div>
           ${c.sede ? `<div><dt>${I.local}Sede</dt><dd>${esc(c.sede)}</dd></div>` : ''}
@@ -460,7 +461,8 @@
       const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 3500);
       const r = await fetch('/api/conteudo', { signal: ctl.signal, headers: { accept: 'application/json' } }); clearTimeout(t);
       if (!r.ok || !(r.headers.get('content-type') || '').includes('json')) return;
-      const j = await r.json();
+      const j = await r.json(); RESPOSTA_PAINEL = j;
+      if (Array.isArray(j.agenda)) AGENDA = j.agenda;
       if (window.APARENCIA) window.APARENCIA.aplicar(j.aparencia);
       // páginas dos comitês editadas pelo painel
       for (const [id, d] of Object.entries(j.comites || {})) {
@@ -484,7 +486,88 @@
     } catch (e) { /* sem painel: usa só o conteúdo fixo */ }
   }
 
-  cabecalho(); rodape();
+  /* ---------- agenda de reuniões (cadastrada no painel) ---------- */
+  let AGENDA = [], RESPOSTA_PAINEL = null;
+  const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  const I_RELOGIO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  const I_LUPA = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  const linkSeguro = s => /^(https:\/\/|\/arquivos\/|midia\/)/i.test(s || '') && !/["'<>\s\\]/.test(s);
+  function agendaHtml(lista) {
+    return `<div class="agenda">${lista.map(e => {
+      const p = String(e.data || '').split('-'), c = porId[e.comite];
+      return `<article class="evento" style="--c:${c ? c.cor : 'var(--azul)'}">
+        <div class="dia"><b>${esc(p[2] || '')}</b><span>${MESES[+p[1] - 1] || ''}</span><small>${esc(p[0] || '')}</small></div>
+        <div class="txt"><div class="meta">${c ? `<a class="chip" style="--c:${c.cor}" href="comite.html?c=${c.id}">${c.sigla}</a>` : '<span class="chip">Todos os comitês</span>'}${e.hora ? `<span class="data">${I_RELOGIO}${esc(e.hora)}</span>` : ''}</div>
+        <h3>${esc(e.titulo)}</h3>${e.local ? `<p class="onde">${I.local}<span>${esc(e.local)}</span></p>` : ''}${e.descricao ? `<p>${esc(e.descricao)}</p>` : ''}
+        ${linkSeguro(e.link) ? `<a class="btn btn-linha btn-sm" href="${esc(e.link)}" target="_blank" rel="noopener">Ver convocação</a>` : ''}</div></article>`;
+    }).join('')}</div>`;
+  }
+  function agendaInicio() {
+    const s = $('#agenda-secao'); if (!s || !AGENDA.length) return;
+    $('#agenda').innerHTML = agendaHtml(AGENDA.slice(0, 4)); s.hidden = false;
+  }
+  function agendaComite(id) {
+    const ev = AGENDA.filter(e => e.comite === id || e.comite === 'geral').slice(0, 3);
+    return ev.length ? `<section class="agenda-comite"><h2>Próximas reuniões</h2>${agendaHtml(ev)}</section>` : '';
+  }
+
+  /* ---------- busca no site (notícias, documentos e comitês) ---------- */
+  const semAcento = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  let INDICE = null;
+  function carregarScript(src) { return new Promise((ok, erro) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = erro; document.head.appendChild(s); }); }
+  async function montarIndice() {
+    if (INDICE) return INDICE;
+    const itens = [];
+    COMITES.forEach(c => itens.push({ g: 'Comitês', t: `${c.sigla} – ${c.nome}`, s: c.sede ? 'Sede em ' + c.sede : '', u: 'comite.html?c=' + c.id, x: (c.municipios || []).join(' ') + ' ' + (c.curto || '') }));
+    let api = RESPOSTA_PAINEL;
+    if (!api && /^https?:$/.test(location.protocol)) { try { const r = await fetch('/api/conteudo'); if (r.ok) api = await r.json(); } catch (e) { } }
+    const rem = (api && api.removidos) || {}, remN = new Set((rem.noticias || []).map(String)), remD = new Set(rem.documentos || []);
+    const vistos = new Set();
+    ((api && api.noticias) || []).forEach(n => { vistos.add(String(n.id)); itens.push({ g: 'Notícias', t: n.titulo, s: n.data ? dataBR(n.data) : '', u: 'noticia.html?id=' + encodeURIComponent(n.id), x: n.resumo || '' }); });
+    try {
+      const r = await fetch('assets/js/noticias-meta.json'); const meta = r.ok ? await r.json() : {};
+      Object.entries(meta).forEach(([id, n]) => { if (!vistos.has(id) && !remN.has(id)) itens.push({ g: 'Notícias', t: n.t, s: '', u: 'noticia.html?id=' + encodeURIComponent(id), x: n.r || '' }); });
+    } catch (e) { }
+    if (!window.DOCUMENTOS) { try { await carregarScript('assets/js/documentos.js'); } catch (e) { } }
+    const docs = ((api && api.documentos) || []).concat((window.DOCUMENTOS || []).filter(d => !remD.has(d.id || ('arq:' + d.arquivo))));
+    docs.forEach(d => { const c = porId[d.comite]; if (linkSeguro(d.arquivo)) itens.push({ g: 'Documentos', t: d.titulo, s: [c ? c.sigla : 'CBHTO', d.categoria, d.ano].filter(Boolean).join(' · '), u: d.arquivo, x: d.descricao || '', fora: true }); });
+    const palavras = s => ' ' + semAcento(s).replace(/[^a-z0-9]+/g, ' ');
+    itens.forEach(i => { i.nt = palavras(i.t); i.nx = palavras(i.s + ' ' + i.x); });
+    return INDICE = itens;
+  }
+  function buscar(q) {
+    const termos = semAcento(q).split(/\s+/).filter(t => t.length > 1);
+    if (!termos.length || !INDICE) return [];
+    return INDICE.map(i => { let p = 0; for (const t of termos) { if (i.nt.includes(' ' + t)) p += 3; else if (i.nx.includes(' ' + t)) p += 1; else return null; } return { i, p }; })
+      .filter(Boolean).sort((a, b) => b.p - a.p).map(r => r.i);
+  }
+  function iniciarBusca() {
+    const marca = $('.topo .marca'); if (!marca) return;
+    marca.insertAdjacentHTML('afterend', `<button class="abre-busca" type="button" aria-label="Buscar no site">${I_LUPA}</button>`);
+    document.body.insertAdjacentHTML('beforeend', `<div class="busca" hidden role="dialog" aria-modal="true" aria-label="Busca no site"><div class="busca-cx">
+      <div class="busca-campo">${I_LUPA}<input type="search" id="busca-q" placeholder="Buscar notícias, documentos e comitês" autocomplete="off" aria-label="O que você procura?"><button type="button" class="busca-fechar" aria-label="Fechar a busca">${I.fechar}</button></div>
+      <div class="busca-res" id="busca-res" aria-live="polite"><p class="busca-dica">Digite pelo menos duas letras. Exemplos: ata, plano de bacia, Formoso.</p></div></div></div>`);
+    const cx = $('.busca'), q = $('#busca-q'), res = $('#busca-res');
+    const fechar = () => { cx.hidden = true; document.body.style.overflow = ''; $('.abre-busca').focus(); };
+    const mostrar = () => {
+      const v = q.value.trim();
+      if (v.length < 2) { res.innerHTML = '<p class="busca-dica">Digite pelo menos duas letras. Exemplos: ata, plano de bacia, Formoso.</p>'; return; }
+      if (!INDICE) { res.innerHTML = '<p class="busca-dica">Carregando…</p>'; return; }
+      const achados = buscar(v);
+      if (!achados.length) { res.innerHTML = `<p class="busca-dica">Nada encontrado para “${esc(v)}”. Tente outra palavra.</p>`; return; }
+      res.innerHTML = ['Comitês', 'Notícias', 'Documentos'].map(g => {
+        const l = achados.filter(i => i.g === g); if (!l.length) return '';
+        return `<h3>${g} <small>${l.length}</small></h3>` + l.slice(0, 8).map(i => `<a href="${esc(i.u)}"${i.fora ? ' target="_blank" rel="noopener"' : ''}><b>${esc(i.t)}</b>${i.s ? `<small>${esc(i.s)}</small>` : ''}</a>`).join('') + (l.length > 8 ? `<p class="busca-mais">e mais ${l.length - 8}. Digite mais palavras para refinar.</p>` : '');
+      }).join('');
+    };
+    $('.abre-busca').addEventListener('click', () => { cx.hidden = false; document.body.style.overflow = 'hidden'; q.focus(); montarIndice().then(mostrar); });
+    $('.busca-fechar').addEventListener('click', fechar);
+    cx.addEventListener('click', e => { if (e.target === cx) fechar(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !cx.hidden) fechar(); });
+    q.addEventListener('input', mostrar);
+  }
+
+  cabecalho(); rodape(); iniciarBusca();
   const pg = document.body.dataset.pagina;
   // páginas que mostram conteúdo ou fotos do painel esperam a resposta; as outras só atualizam o tema
   if (['inicio', 'comite', 'documentos', 'noticias', 'noticia', 'creditos'].includes(pg)) conteudoDoPainel().then(() => P[pg] && P[pg]());
