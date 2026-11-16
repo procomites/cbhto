@@ -454,3 +454,18 @@ a.chip:hover{color:#fff;filter:brightness(1.08)}
   .btn-sm{padding:10px 18px}
   .car-pontos button::after{inset:-16px -6px}
 }
+
+/* ---- Etapa 2 do polimento: início e páginas dos comitês ---- */
+.logo-comite .img{height:78px}
+.logo-comite img{max-height:70px;max-width:82%}
+.logo-comite b{font-family:var(--f-titulo);font-size:.875rem}
+.ficha h3{font-size:1.0625rem}
+.ficha dl{gap:14px}
+.ficha dt{display:flex;align-items:center;gap:7px;margin-bottom:2px}
+.ficha dt svg{width:15px;height:15px;color:var(--azul);flex:none}
+.ficha dd{padding-left:22px;overflow-wrap:anywhere}
+.abas-comite a{font-size:1rem}
+.lista-mapa b{font-family:var(--f-titulo)}
+.card-nt h3,.destaque h3{text-wrap:pretty}
+.doc b{font-weight:600}
+.ficha dd.mun{padding-left:0}

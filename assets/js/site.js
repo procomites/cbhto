@@ -18,6 +18,11 @@
 
   /* ---------- ícones ---------- */
   const I = {
+    sigla: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
+    regiao: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>',
+    area: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h3M4 14h3M9 20v-3M14 20v-3"/></svg>',
+    pessoa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+    cidades: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l6-4v17M11 21V11l8 3v7M8 10v.01M8 14v.01M8 18v.01M15 16v.01"/></svg>',
     seta: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>',
     esq: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>',
     dir: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
@@ -295,15 +300,15 @@
       const temImg = /<img/.test(hist);
       sec.innerHTML = `<div class="com-lateral"><div class="texto-rico">${hist}</div>
         <aside class="ficha"><h3>Ficha do comitê</h3><dl>
-          <div><dt>Sigla</dt><dd>${c.sigla}</dd></div>
-          ${c.sede ? `<div><dt>Sede</dt><dd>${esc(c.sede)}</dd></div>` : ''}
-          ${c.regiao ? `<div><dt>Região</dt><dd>${esc(c.regiao)}</dd></div>` : ''}
-          ${c.area ? `<div><dt>Área da bacia</dt><dd>${esc(c.area)}</dd></div>` : ''}
-          ${c.criacao ? `<div><dt>Criação</dt><dd>${esc(c.criacao)}</dd></div>` : ''}
-          ${dirAtual[0] ? `<div><dt>${esc(dirAtual[0].cargo || 'Presidente')}</dt><dd>${esc(dirAtual[0].nome)}</dd></div>` : ''}
-          ${K.email ? `<div><dt>E-mail</dt><dd><a href="mailto:${esc(K.email)}">${esc(K.email)}</a></dd></div>` : ''}
+          <div><dt>${I.sigla}Sigla</dt><dd>${c.sigla}</dd></div>
+          ${c.sede ? `<div><dt>${I.local}Sede</dt><dd>${esc(c.sede)}</dd></div>` : ''}
+          ${c.regiao ? `<div><dt>${I.regiao}Região</dt><dd>${esc(c.regiao)}</dd></div>` : ''}
+          ${c.area ? `<div><dt>${I.area}Área da bacia</dt><dd>${esc(c.area)}</dd></div>` : ''}
+          ${c.criacao ? `<div><dt>${I.cal}Criação</dt><dd>${esc(c.criacao)}</dd></div>` : ''}
+          ${dirAtual[0] ? `<div><dt>${I.pessoa}${esc(dirAtual[0].cargo || 'Presidente')}</dt><dd>${esc(dirAtual[0].nome)}</dd></div>` : ''}
+          ${K.email ? `<div><dt>${I.mail}E-mail</dt><dd><a href="mailto:${esc(K.email)}">${esc(K.email)}</a></dd></div>` : ''}
           ${K.totais && K.totais.total ? `<div><dt>Membros${K.mandato ? ' (' + esc(K.mandato) + ')' : ''}</dt><dd>${K.totais.total} cadeiras</dd></div>` : ''}
-          ${(c.municipios || []).length ? `<div><dt>Municípios (${c.municipios.length})</dt><dd class="mun">${c.municipios.map(m => `<span>${esc(m)}</span>`).join('')}</dd></div>` : ''}
+          ${(c.municipios || []).length ? `<div><dt>${I.cidades}Municípios (${c.municipios.length})</dt><dd class="mun">${c.municipios.map(m => `<span>${esc(m)}</span>`).join('')}</dd></div>` : ''}
         </dl>${c.mapa && !temImg ? `<img class="mapa-bacia" src="${c.mapa}" alt="Mapa da bacia">` : ''}</aside></div>`;
     } else if (s === 'diretoria') {
       const tab = dirAtual.length ? `<div class="tabela-rolagem"><table class="membros dir"><tr><th>Cargo</th><th>Nome</th><th>Instituição</th></tr>${dirAtual.map(m => `<tr><td><b>${esc(m.cargo || '')}</b></td><td>${esc(m.nome)}</td><td>${esc(m.instituicao || '')}</td></tr>`).join('')}</table></div>` : '';
