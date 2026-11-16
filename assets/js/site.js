@@ -306,7 +306,7 @@
           ${(c.municipios || []).length ? `<div><dt>Municípios (${c.municipios.length})</dt><dd class="mun">${c.municipios.map(m => `<span>${esc(m)}</span>`).join('')}</dd></div>` : ''}
         </dl>${c.mapa && !temImg ? `<img class="mapa-bacia" src="${c.mapa}" alt="Mapa da bacia">` : ''}</aside></div>`;
     } else if (s === 'diretoria') {
-      const tab = dirAtual.length ? `<div class="tabela-rolagem"><table class="membros"><tr><th>Cargo</th><th>Nome</th><th>Instituição</th></tr>${dirAtual.map(m => `<tr><td><b>${esc(m.cargo || '')}</b></td><td>${esc(m.nome)}</td><td>${esc(m.instituicao || '')}</td></tr>`).join('')}</table></div>` : '';
+      const tab = dirAtual.length ? `<div class="tabela-rolagem"><table class="membros dir"><tr><th>Cargo</th><th>Nome</th><th>Instituição</th></tr>${dirAtual.map(m => `<tr><td><b>${esc(m.cargo || '')}</b></td><td>${esc(m.nome)}</td><td>${esc(m.instituicao || '')}</td></tr>`).join('')}</table></div>` : '';
       const contato = K.email ? `<p class="nota-tabela">Contato do comitê: <a href="mailto:${esc(K.email)}">${esc(K.email)}</a>${K.mandato ? ' · Mandato ' + esc(K.mandato) : ''}</p>` : '';
       const antigo = x.diretoria ? (tab ? `<details class="camara"><summary>Diretorias anteriores</summary><div class="texto-rico">${x.diretoria}</div></details>` : `<div class="texto-rico">${x.diretoria}</div>`) : '';
       sec.innerHTML = titulo('Diretoria') + tab + contato + antigo;
@@ -321,7 +321,7 @@
           const seg = m.segmento || ultimoSeg; ultimoSeg = seg;
           return { ...m, seg };
         });
-        html += segs.map(sg => `<h3 class="seg-membros">${esc(sg)}</h3><div class="tabela-rolagem"><table class="membros"><tr><th>Cadeira</th><th>Vaga</th><th>Instituição</th><th>Representante</th></tr>${linhas.filter(m => m.seg === sg).map(m => m.instituicao ? `<tr><td>${esc(m.cadeira)}</td><td>${esc(m.vaga)}</td><td>${esc(m.instituicao)}</td><td>${esc(m.representante || '—')}</td></tr>` : `<tr class="vaga-aberta"><td>${esc(m.cadeira)}</td><td>${esc(m.vaga)}</td><td colspan="2"><i>Vaga em aberto</i></td></tr>`).join('')}</table></div>`).join('');
+        html += segs.map(sg => `<h3 class="seg-membros">${esc(sg)}</h3><div class="tabela-rolagem"><table class="membros comp"><tr><th>Cadeira</th><th>Vaga</th><th>Instituição</th><th>Representante</th></tr>${linhas.filter(m => m.seg === sg).map(m => m.instituicao ? `<tr><td>${esc(m.cadeira)}</td><td>${esc(m.vaga)}</td><td>${esc(m.instituicao)}</td><td>${esc(m.representante || '—')}</td></tr>` : `<tr class="vaga-aberta"><td>${esc(m.cadeira)}</td><td>${esc(m.vaga)}</td><td colspan="2"><i>Vaga em aberto</i></td></tr>`).join('')}</table></div>`).join('');
         html += `<p class="nota-tabela">Composição informada pela SEMARH/Procomitês. Correções: ${K.email ? `<a href="mailto:${esc(K.email)}">${esc(K.email)}</a>` : 'Fale conosco'}.</p>`;
       } else if ((c.composicao || []).length) {
         html += `<table class="membros"><tr><th>Nome</th><th>Segmento</th><th>Instituição</th></tr>${c.composicao.map(m => `<tr><td>${esc(m.nome)}</td><td>${esc(m.segmento || '')}</td><td>${esc(m.instituicao || m.cargo || '')}</td></tr>`).join('')}</table><br>`;

@@ -60,7 +60,7 @@
 .ban-s1{stop-color:var(--ban-s1)} .ban-s2{stop-color:var(--ban-s2)}
 .ban-t1{stop-color:var(--ban-t1)} .ban-t2{stop-color:var(--ban-t2)}
 .ban-somb{fill:var(--ban-somb);opacity:.42}
-.ban-frase{font-family:Poppins,Arial,sans-serif;font-size:25px;fill:var(--marinho);text-anchor:middle}
+.ban-frase{font-family:Montserrat,Arial,sans-serif;font-weight:600;font-size:24px;fill:var(--marinho);text-anchor:middle}
 .ban-disco{fill:#fff;stroke:rgba(0,0,0,.08);stroke-width:1}
 
 /* ---------- faixa da campanha ---------- */

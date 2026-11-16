@@ -172,8 +172,8 @@
       buttons: ['paragraph', 'font', 'fontsize', 'lineHeight', '|', 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'brush', 'eraser', '|',
         'ul', 'ol', 'outdent', 'indent', 'align', '|', 'table', 'image', 'link', 'hr', 'symbols', '|', 'undo', 'redo', 'selectall', 'copyformat', '|', 'preview', 'fullsize', 'source'],
       removeButtons: ['file', 'video', 'print', 'about', 'spellcheck', 'speechRecognize', 'ai-commands', 'ai-assistant'],
-      controls: { font: { list: { 'Poppins,sans-serif': 'Poppins (padrão do site)', 'Arial,Helvetica,sans-serif': 'Arial', 'Georgia,serif': 'Georgia', "'Times New Roman',Times,serif": 'Times New Roman', 'Verdana,Geneva,sans-serif': 'Verdana' } } },
-      style: { fontFamily: 'Poppins, sans-serif', fontSize: '16px' },
+      controls: { font: { list: { '': 'Padrão do site', 'Arial,Helvetica,sans-serif': 'Arial', 'Georgia,serif': 'Georgia', "'Times New Roman',Times,serif": 'Times New Roman', 'Verdana,Geneva,sans-serif': 'Verdana' } } },
+      style: { fontFamily: "'Source Sans 3', sans-serif", fontSize: '16px' },
       image: { editSrc: false },
       uploader: {
         url: '/api/admin/upload', format: 'json', withCredentials: true, headers: { 'x-cbhto-painel': '1' },
