@@ -7,7 +7,7 @@ import { rotaAgenda } from '../../_agenda.js';
 
 const CATS_COMITE = ['Atas de reuniões', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Estudos e publicações', 'Diversos', 'Outros arquivos'];
 const CATS_GERAIS = ['Atas', 'Resoluções e deliberações', 'Legislação', 'Câmaras técnicas', 'Listas de membros', 'Planos de bacia', 'Publicações'];
-const TIPOS_UPLOAD = { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xls: 'application/vnd.ms-excel', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', odt: 'application/vnd.oasis.opendocument.text', ods: 'application/vnd.oasis.opendocument.spreadsheet', csv: 'text/csv' };
+const TIPOS_UPLOAD = { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', xls: 'application/vnd.ms-excel', xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', odt: 'application/vnd.oasis.opendocument.text', ods: 'application/vnd.oasis.opendocument.spreadsheet', csv: 'text/csv', mp4: 'video/mp4', webm: 'video/webm' };
 const LIMITE_MB = 25;
 
 export async function onRequest({ request, env, params }) {
@@ -181,7 +181,7 @@ async function upload(request, env, u) {
   if (!f || typeof f === 'string') return erro('Nenhum arquivo recebido.');
   if (f.size > LIMITE_MB * 1024 * 1024) return erro(`O arquivo passa de ${LIMITE_MB} MB. Comprima antes de enviar.`);
   const ext = (f.name.split('.').pop() || '').toLowerCase(); const tipo = TIPOS_UPLOAD[ext];
-  if (!tipo) return erro('Tipo de arquivo não permitido. Use PDF, imagem (JPG, PNG, WebP), Word, Excel ou ODT.');
+  if (!tipo) return erro('Tipo de arquivo não permitido. Use PDF, imagem (JPG, PNG, WebP), vídeo (MP4, WebM), Word, Excel ou ODT.');
   const base = f.name.replace(/\.[^.]+$/, '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase().slice(0, 60) || 'arquivo';
   const d = new Date(); const chave = `${d.getUTCFullYear()}/${String(d.getUTCMonth() + 1).padStart(2, '0')}/${Math.random().toString(36).slice(2, 8)}-${base}.${ext}`;
   await env.ARQUIVOS.put(chave, await f.arrayBuffer(), { metadata: { tipo, nome: f.name.slice(0, 120), enviadoPor: u.email } });
