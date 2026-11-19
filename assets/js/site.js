@@ -128,6 +128,28 @@
     $$('a[href^="midia/"]', el).forEach(a => { a.target = '_blank'; });
     $$('img', el).forEach(i => { i.loading = 'lazy'; i.alt = i.alt || ''; });
     $$('iframe', el).forEach(f => { f.setAttribute('allowfullscreen', ''); f.loading = 'lazy'; });
+    $$('.galeria-noticia', el).forEach(carrossel);
+  }
+
+  /* ---------- carrossel de fotos dentro do texto (bloco .galeria-noticia montado pelo painel) ---------- */
+  function carrossel(g) {
+    if (g.dataset.pronto) return; g.dataset.pronto = '1';
+    const figs = [...g.children].filter(x => x.tagName === 'FIGURE' || x.tagName === 'IMG');
+    if (!figs.length) return;
+    const t = document.createElement('div'); t.className = 'trilho';
+    figs.forEach(f => { if (f.tagName === 'IMG') { const fg = document.createElement('figure'); fg.appendChild(f); f = fg; } t.appendChild(f); });
+    g.innerHTML = ''; g.appendChild(t);
+    g.setAttribute('role', 'region'); g.setAttribute('aria-roledescription', 'carrossel'); g.setAttribute('aria-label', 'Fotos');
+    if (figs.length < 2) return;
+    const cont = document.createElement('span'); cont.className = 'car-cont'; cont.setAttribute('aria-live', 'polite');
+    const ant = document.createElement('button'); ant.type = 'button'; ant.className = 'car-btn car-ant'; ant.setAttribute('aria-label', 'Foto anterior'); ant.innerHTML = I.esq;
+    const prox = document.createElement('button'); prox.type = 'button'; prox.className = 'car-btn car-prox'; prox.setAttribute('aria-label', 'Próxima foto'); prox.innerHTML = I.dir;
+    g.append(ant, prox, cont);
+    const atual = () => Math.round(t.scrollLeft / Math.max(1, t.clientWidth));
+    const vai = i => t.scrollTo({ left: ((i + figs.length) % figs.length) * t.clientWidth });
+    const marca = () => { cont.textContent = (atual() + 1) + ' / ' + figs.length; };
+    ant.onclick = () => vai(atual() - 1); prox.onclick = () => vai(atual() + 1);
+    t.addEventListener('scroll', () => requestAnimationFrame(marca), { passive: true }); marca();
   }
 
   /* ---------- lightbox ---------- */
