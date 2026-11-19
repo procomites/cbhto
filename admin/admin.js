@@ -209,7 +209,11 @@
       <div class="campo"><span class="rot">Foto de capa</span><div class="capa"><img id="f-capa-img" src="${esc(item.imagem ? (item.imagem.startsWith('/') || item.imagem.startsWith('http') ? item.imagem : '../' + item.imagem) : '../assets/img/marca/cbhto-azul.png')}" alt=""><div><input type="file" id="f-capa" accept="image/jpeg,image/png,image/webp"><div class="ajuda">JPG, PNG ou WebP, até 25 MB.</div>${item.imagem ? '<button class="btn linha peq" type="button" id="f-capa-tirar" style="margin-top:6px">Remover foto</button>' : ''}</div></div><input type="hidden" id="f-imagem" value="${esc(item.imagem || '')}"></div>
       <div class="campo"><label for="f-resumo">Resumo <span style="font-weight:400;color:var(--suave)">(aparece nos cartões; opcional)</span></label><textarea id="f-resumo" rows="2" maxlength="400">${esc(item.resumo || '')}</textarea></div>
       <div class="campo"><span class="rot">Texto da notícia</span>
-        <textarea id="f-html"></textarea><div class="ajuda">Use a barra de ferramentas para formatar o texto e inserir tabelas, imagens e links. Ao colar do Word, a formatação é limpa automaticamente.</div></div>` : `
+        <textarea id="f-html"></textarea><div class="ajuda">Use a barra de ferramentas para formatar o texto e inserir tabelas, imagens e links. Ao colar do Word, a formatação é limpa automaticamente.</div>
+        <div class="linha2" style="margin-top:10px">
+          <div class="campo"><span class="rot">Carrossel de fotos</span><input type="file" id="f-galeria" accept="image/jpeg,image/png,image/webp" multiple><div class="ajuda">Escolha várias fotos de uma vez. O carrossel entra onde estiver o cursor no texto; depois, edite as legendas no próprio texto.</div></div>
+          <div class="campo"><span class="rot">Vídeo</span><input type="file" id="f-video" accept="video/mp4,video/webm"><div class="ajuda">MP4 ou WebM, até 25 MB. O vídeo entra onde estiver o cursor no texto.</div></div>
+        </div></div>` : `
       <div class="campo"><label for="f-descricao">Descrição <span style="font-weight:400;color:var(--suave)">(opcional)</span></label><textarea id="f-descricao" rows="2" maxlength="500">${esc(item.descricao || '')}</textarea></div>
       <div class="linha2"><div class="campo"><label for="f-comite">Comitê</label>${fixo ? `<div>${chip(EU.comite)}</div><input type="hidden" id="f-comite" value="${esc(EU.comite)}">` : `<select id="f-comite"><option value="">Escolha…</option>${COMITES.map(c => `<option value="${c.id}" ${comiteDoc === c.id ? 'selected' : ''}>${c.sigla} – ${esc(c.curto || c.nome)}</option>`).join('')}<option value="cbhto" ${comiteDoc === 'cbhto' ? 'selected' : ''}>CBHTO – documento geral</option></select>`}</div>
         <div class="campo"><label for="f-categoria">Categoria</label><select id="f-categoria"></select></div></div>
@@ -227,6 +231,13 @@
       EDITOR = criarEditor($('#f-html'), item.html || '');
       $('#f-capa').onchange = async e => { const r = await enviarArquivo(e.target); if (r) { $('#f-imagem').value = r.url; $('#f-capa-img').src = r.url; } };
       if ($('#f-capa-tirar')) $('#f-capa-tirar').onclick = () => { $('#f-imagem').value = ''; $('#f-capa-img').src = '../assets/img/marca/cbhto-azul.png'; };
+      const inserir = html => { if (EDITOR) EDITOR.s.insertHTML(html); else $('#f-html').value += html; };
+      $('#f-galeria').onchange = async e => {
+        const inp = e.target, arqs = [...inp.files], urls = [];
+        for (const f of arqs) { const dt = new DataTransfer(); dt.items.add(f); inp.files = dt.files; const r = await enviarArquivo(inp); if (r) urls.push([r.url, f.name.replace(/\.[^.]+$/, '')]); }
+        if (urls.length) { inserir(`<div class="galeria-noticia">${urls.map(u => `<figure><img src="${esc(u[0])}" alt="${esc(u[1])}"><figcaption>Legenda da foto</figcaption></figure>`).join('')}</div><p></p>`); aviso(urls.length + ' foto(s) no carrossel.'); }
+      };
+      $('#f-video').onchange = async e => { const r = await enviarArquivo(e.target); if (r) inserir(`<div class="video-noticia"><video controls src="${esc(r.url)}"></video></div><p></p>`); };
     } else {
       const sc = $('#f-comite'), cat = $('#f-categoria');
       const encherCats = () => { const lista = sc.value === 'cbhto' ? CATS_GERAIS : CATS_COMITE; cat.innerHTML = `<option value="">Escolha…</option>` + lista.map(c => `<option ${item.categoria === c ? 'selected' : ''}>${c}</option>`).join(''); };
